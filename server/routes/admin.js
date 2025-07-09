@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+const upload = require('../middleware/upload');
 
 // Auth middleware
 function auth(req, res, next) {
@@ -12,12 +13,25 @@ function auth(req, res, next) {
         req.user = decoded;
         next();
     });
-}
+} 
 
 // Admin panel
 router.get('/panel', auth, async (req, res) => {
     const users = await User.find({ role: 'user' });
-    res.json({ users });
+    res.json({ users }); 
+});
+
+router.post('/products', auth, upload.single('image'), async (req, res) => {
+    const { name, catagory, price, productId } = req.body;
+    const user = await User.findById(req.user.id);
+    const item = user.cart.find(i => i.productId === productId);
+    if (item) {
+        item.quantity = Number(item.quantity) + Number(quantity);
+    } else {
+        user.cart.push({ productId, name, quantity , imageUrl: req.file.path, price });
+    }
+    await user.save();
+    res.json({ cart: user.cart });
 });
 
 module.exports = router;
