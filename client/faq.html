@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-commerce Navbar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="script.js" defer type="module"></script>
+
+ <link rel="stylesheet" href="style.css">
+  <style>
+  /* Banner */
+  .btn-outline-light:hover {
+    background-color: rgb(225, 189, 8);
+  }
+
+
+     .accordion-button:focus {
+    box-shadow: none;
+  }
+  .accordion-button:not(.collapsed) {
+    background-color: #e7f1ff;
+    color: #0d6efd;
+  }
+  .accordion-button i {
+    font-size: 1.2rem;
+  }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark navbar-expand-lg navbar-custom px-2 sticky-top">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold" href="index.html"><img src="./images/logo.png" alt="logo" style="width: 220px ; height: auto;"></a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon "></span>
+    </button>
+
+    <!-- Navbar links and search -->
+    <div class="collapse navbar-collapse px-2" id="navbarContent">
+
+      <!-- Left side -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+
+        <!-- Categories Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Categories
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="Categories/electronic.html">Electronics</a></li>
+            <li><a class="dropdown-item" href="Categories/fashion.html">Fashion</a></li>
+            <li><a class="dropdown-item" href="Categories/homeKitchen.html">Home & Kitchen</a></li>
+            <li><a class="dropdown-item" href="Categories/books.html">Books</a></li>
+            <li><a class="dropdown-item" href="Categories/beauty.html">Beauty & Personal Care</a></li>
+            <li><a class="dropdown-item" href="Categories/grocery.html">Grocery & Food</a></li>
+            <li><a class="dropdown-item" href="Categories/sports.html">Sports & Outdoor</a></li>
+            <li><a class="dropdown-item" href="Categories/toys.html">Toys & Games</a></li>
+            <li><a class="dropdown-item" href="Categories/babyKid.html">Baby & Kids</a></li>
+            <li><a class="dropdown-item" href="Categories/stationery.html">Stationery</a></li>
+            <li><a class="dropdown-item" href="Categories/accessories.html">Accessories</a></li>
+            <li><a class="dropdown-item" href="Categories/devices.html">Devices</a></li>
+            <li><a class="dropdown-item" href="Categories/travel.html">Travel & Luggage</a></li>
+            <li><a class="dropdown-item" href="Categories/furniture.html">Furniture</a></li>
+            <li><a class="dropdown-item" href="Categories/art.html">Art & Crafts</a></li>
+            <li><a class="dropdown-item" href="Categories/jewelry.html">Jewelry</a></li>
+
+          </ul>
+        </li>
+
+        <!-- Contact -->
+        <li class="nav-item">
+          <a class="nav-link" href="contact.html">Contact</a>
+        </li>
+
+        <!-- Offers -->
+        <li class="nav-item">
+          <a class="nav-link" href="offers.html"><i class="fas fa-tag" style="color:#EF990F ;"></i> Offers</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="sell.html"><i class="fas fa-dollar-sign" style="color:#EF990F ;"></i> Sell</a>
+        </li>
+      </ul>
+
+    <!-- Search Bar -->
+      <form class="d-flex mx-lg-3 search-bar my-2 my-lg-0" role="search" >
+        <input class="form-control search-input text-dark rounded-start " type="search" placeholder="Search products" aria-label="Search" >
+        <button class="btn btn-warning search-button rounded-end" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <!-- Right side -->
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">   <!-- Orders -->
+          <a class="nav-link" href="orders.html"><i class="fas fa-box me-2" style="color:#EF990F ;"></i>Orders</a>
+        </li>
+        <li class="nav-item">  <!-- Cart -->
+          <a class="nav-link" href="cart.html"><i class="fa-solid fa-cart-shopping" style="color:#EF990F ;"></i> Cart</a>
+        </li>
+        <li class="nav-item">  <!-- Login -->
+          <a class="nav-link" href="login.html"><i class="fa-solid fa-user" style="color:#EF990F ;"></i> Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Combined FAQ & Help Banner -->
+<section class="py-5 text-warning text-center position-relative" style="background: url('https://img.freepik.com/premium-vector/abstract-technology-particles-lines-background_907220-2036.jpg?semt=ais_hybrid&w=740') center/cover no-repeat;">
+  <!-- Dark overlay -->
+  <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(35, 34, 34, 0.219); z-index: 1;"></div>
+
+  <div class="container position-relative z-2">
+    <div class="mb-4">
+      <h1 class="display-4 fw-bold">
+        <i class="fas fa-question-circle me-2"></i> FAQ & Help Center
+      </h1>
+    </div>
+    <p class="mb-4 fs-5 text-white">
+      <i class="fas fa-info-circle me-2 text-white"></i><em> Find answers to common questions and get the support you need.</em>
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="faq.html" class="btn btn-outline-light btn-lg rounded-pill">
+        <i class="fas fa-book-open me-2"></i> Browse FAQs
+      </a>
+      <a href="contact.html" class="btn btn-primary btn-lg rounded-pill">
+        <i class="fas fa-headset me-2"></i> Get Support
+      </a>
+    </div>
+  </div>
+</section>
+
+
+ 
+
+
+<!-- FAQ Accordion Section with Icons -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-indigo fs-1">Your Questions Answered</h2>
+      <p class="text-muted para fs-5"><em>Find the answers to our most commonly asked questions below.</em></p>
+    </div>
+    
+    <div class="accordion accordion-flush rounded-4 shadow-sm bg-white" id="faqAccordion">
+      <!-- Item 1 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button fw-semibold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <i class="fas fa-shopping-cart me-2 text-warning"></i> How do I place an order?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary">
+            Browse our categories, add products to your cart, and proceed to checkout. Follow the steps to provide your shipping details and make payment securely.
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed fw-semibold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <i class="fas fa-credit-card me-2 text-warning"></i> What payment methods are accepted?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary">
+            We accept all major debit and credit cards, UPI, net banking, and COD (Cash on Delivery) in selected locations.
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed fw-semibold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <i class="fas fa-truck me-2 text-warning"></i> How long does delivery take?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary">
+            Delivery usually takes between 2–7 business days depending on your location. You'll receive tracking information once your order ships.
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFour">
+          <button class="accordion-button collapsed fw-semibold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            <i class="fas fa-undo me-2 text-warning"></i> Can I return or exchange a product?
+          </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary">
+            Yes! We have a hassle-free return policy. You can request a return or exchange within 7 days of delivery, provided the item is unused and in original packaging.
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFive">
+          <button class="accordion-button collapsed fw-semibold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            <i class="fas fa-headset me-2 text-warning"></i> How can I contact support?
+          </button>
+        </h2>
+        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-secondary">
+            You can reach us via our <a href="contact.html" class="text-decoration-none text-primary fw-semibold">Contact Us</a> page. Our support team is available 24/7 to help you!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- Help Topics Grid -->
+<section class="py-5 " style="background-color: #f1f5fa;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-indigo fs-1">How Can We Assist You?</h2>
+      <p class="text-muted para fs-5"><em>Browse our help topics to find answers and guidance.</em></p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Help Card 1 -->
+      <div class="col-6 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm rounded-4 text-center p-4 hover-effect">
+          <div class="mb-3 fs-1" style="color: #EF990F;">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <h5 class="fw-bold mb-2">Ordering Help</h5>
+          <p class="text-muted">
+            Step-by-step guidance on placing and managing orders.
+          </p>
+        </div>
+      </div>
+
+      <!-- Help Card 2 -->
+      <div class="col-6 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm rounded-4 text-center p-4 hover-effect">
+          <div class="mb-3  fs-1"  style="color: #EF990F;">
+            <i class="fas fa-credit-card"></i>
+          </div>
+          <h5 class="fw-bold mb-2">Payment Issues</h5>
+          <p class="text-muted">
+            Learn about accepted payment methods and resolving payment errors.
+          </p>
+        </div>
+      </div>
+
+      <!-- Help Card 3 -->
+      <div class="col-6 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm rounded-4 text-center p-4 hover-effect">
+          <div class="mb-3  fs-1"  style="color: #EF990F;">
+            <i class="fas fa-truck"></i>
+          </div>
+          <h5 class="fw-bold mb-2">Shipping & Delivery</h5>
+          <p class="text-muted">
+            Track orders and learn about delivery times and options.
+          </p>
+        </div>
+      </div>
+
+      <!-- Help Card 4 -->
+      <div class="col-6 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm rounded-4 text-center p-4 hover-effect">
+          <div class="mb-3 fs-1"  style="color: #EF990F;">
+            <i class="fas fa-undo"></i>
+          </div>
+          <h5 class="fw-bold mb-2">Returns & Refunds</h5>
+          <p class="text-muted">
+            Learn how to return items and request refunds easily.
+          </p>
+        </div>
+      </div>
+
+      <!-- Help Card 5 -->
+      <div class="col-6 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm rounded-4 text-center p-4 hover-effect">
+          <div class="mb-3  fs-1"  style="color: #EF990F;">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <h5 class="fw-bold mb-2">Account & Security</h5>
+          <p class="text-muted">
+            Manage your account details and learn how we keep you safe.
+          </p>
+        </div>
+      </div>
+
+      <!-- Help Card 6 -->
+      <div class="col-6 col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm rounded-4 text-center p-4 hover-effect">
+          <div class="mb-3 fs-1"  style="color: #EF990F;">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h5 class="fw-bold mb-2">Contact Support</h5>
+          <p class="text-muted">
+            Reach out to our team for personalized assistance anytime.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Footer Sction -->
+    <footer id="footer">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-lg-3 col-md-6 footer-contact">
+              <h4> Sell4Anything</h4>
+              <ul class="li">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="terms.html">Terms & Condition</a></li>
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Usefull Links</h4>
+             <ul>
+              <li><a href="privacy.html">Privacy policy</a></li>
+              <li><a href="deals.html">Famous Deals</a></li>
+              <li><a href="service.html">Services</a></li>
+              <li><a href="cart.html">Cart</a></li>
+              
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Other Links</h4>
+             <ul>
+              <li><a href="offers.html">Offers</a></li>
+              <li><a href="faq.html">FAQ / Help</a></li>
+              <li><a href="sell.html">Start Affiliate</a></li>
+              <li><a href="profile.html">Your Profile</a></li>
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Our Social Networks</h4>
+              <p> With Our Social Networks You Can Join Us with Buying & selling Plenty Of Products .</p>
+
+              <div class="socail-links mt-3">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="container " >
+        <div class="copyright  ">
+         <span class="me-2"> &copy; Copyright 2025</span><strong><span>SellforAnything</span></strong>. All Rights Reserved
+        </div>
+        
+      </div>
+    </footer>
+    <!-- footer -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script> -->
+</body>
+</html>

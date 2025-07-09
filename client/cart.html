@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-commerce Navbar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="script.js" defer type="module"></script>
+ <link rel="stylesheet" href="style.css">
+  <style>
+    
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark navbar-expand-lg navbar-custom px-2 sticky-top">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold" href="index.html"><img src="./images/logo.png" alt="logo" style="width: 220px ; height: auto;"></a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon "></span>
+    </button>
+
+    <!-- Navbar links and search -->
+    <div class="collapse navbar-collapse px-2" id="navbarContent">
+
+      <!-- Left side -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+
+        <!-- Categories Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Categories
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="Categories/electronic.html">Electronics</a></li>
+            <li><a class="dropdown-item" href="Categories/fashion.html">Fashion</a></li>
+            <li><a class="dropdown-item" href="Categories/homeKitchen.html">Home & Kitchen</a></li>
+            <li><a class="dropdown-item" href="Categories/books.html">Books</a></li>
+            <li><a class="dropdown-item" href="Categories/beauty.html">Beauty & Personal Care</a></li>
+            <li><a class="dropdown-item" href="Categories/grocery.html">Grocery & Food</a></li>
+            <li><a class="dropdown-item" href="Categories/sports.html">Sports & Outdoor</a></li>
+            <li><a class="dropdown-item" href="Categories/toys.html">Toys & Games</a></li>
+            <li><a class="dropdown-item" href="Categories/babyKid.html">Baby & Kids</a></li>
+            <li><a class="dropdown-item" href="Categories/stationery.html">Stationery</a></li>
+            <li><a class="dropdown-item" href="Categories/accessories.html">Accessories</a></li>
+            <li><a class="dropdown-item" href="Categories/devices.html">Devices</a></li>
+            <li><a class="dropdown-item" href="Categories/travel.html">Travel & Luggage</a></li>
+            <li><a class="dropdown-item" href="Categories/furniture.html">Furniture</a></li>
+            <li><a class="dropdown-item" href="Categories/art.html">Art & Crafts</a></li>
+            <li><a class="dropdown-item" href="Categories/jewelry.html">Jewelry</a></li>
+
+          </ul>
+        </li>
+
+        <!-- Contact -->
+        <li class="nav-item">
+          <a class="nav-link" href="contact.html">Contact</a>
+        </li>
+
+        <!-- Offers -->
+        <li class="nav-item">
+          <a class="nav-link" href="offers.html"><i class="fas fa-tag" style="color:#EF990F ;"></i> Offers</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="sell.html"><i class="fas fa-dollar-sign" style="color:#EF990F ;"></i> Sell</a>
+        </li>
+      </ul>
+
+    <!-- Search Bar -->
+      <form class="d-flex mx-lg-3 search-bar my-2 my-lg-0" role="search" >
+        <input class="form-control search-input text-dark rounded-start " type="search" placeholder="Search products" aria-label="Search" >
+        <button class="btn btn-warning search-button rounded-end" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <!-- Right side -->
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">   <!-- Orders -->
+          <a class="nav-link" href="orders.html"><i class="fas fa-box me-2" style="color:#EF990F ;"></i>Orders</a>
+        </li>
+        <li class="nav-item">  <!-- Cart -->
+          <a class="nav-link" href="cart.html"><i class="fa-solid fa-cart-shopping" style="color:#EF990F ;"></i> Cart</a>
+        </li>
+        <li class="nav-item">  <!-- Login -->
+          <a class="nav-link" href="login.html"><i class="fa-solid fa-user" style="color:#EF990F ;"></i> Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+    <h2 class="fw-bold mb-4 text-primary">Shopping Cart</h2>
+
+    <!-- Cart Table -->
+    <div class="table-responsive mb-4">
+      <table class="table table-striped align-middle">
+        <thead class="table-primary">
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th style="width: 120px;">Quantity</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="https://via.placeholder.com/60" class="rounded me-2" alt="Product Image" />
+                <span>Wireless Headphones</span>
+              </div>
+            </td>
+            <td>₹1200</td>
+            <td>
+              <input type="number" class="form-control" value="1" min="1">
+            </td>
+            <td>₹1200</td>
+            <td>
+              <button class="btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="https://via.placeholder.com/60" class="rounded me-2" alt="Product Image" />
+                <span>Smartphone</span>
+              </div>
+            </td>
+            <td>₹17999</td>
+            <td>
+              <input type="number" class="form-control" value="1" min="1">
+            </td>
+            <td>₹17999</td>
+            <td>
+              <button class="btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- Add more cart items as needed -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="row justify-content-end">
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Cart Summary</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Subtotal</span>
+              <span>₹19200</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Shipping</span>
+              <span>₹100</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between fw-bold mb-3">
+              <span>Total</span>
+              <span>₹19300</span>
+            </div>
+            <a href="checkout.html" class="btn btn-success w-100">
+              <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+<!-- Footer Sction -->
+    <footer id="footer">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-lg-3 col-md-6 footer-contact">
+              <h4> Sell4Anything</h4>
+              <ul class="li">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="terms.html">Terms & Condition</a></li>
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Usefull Links</h4>
+             <ul>
+              <li><a href="privacy.html">Privacy policy</a></li>
+              <li><a href="deals.html">Famous Deals</a></li>
+              <li><a href="service.html">Services</a></li>
+              <li><a href="cart.html">Cart</a></li>
+              
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Other Links</h4>
+             <ul>
+              <li><a href="offers.html">Offers</a></li>
+              <li><a href="faq.html">FAQ / Help</a></li>
+              <li><a href="sell.html">Start Affiliate</a></li>
+              <li><a href="profile.html">Your Profile</a></li>
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Our Social Networks</h4>
+              <p> With Our Social Networks You Can Join Us with Buying & selling Plenty Of Products .</p>
+
+              <div class="socail-links mt-3">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="container " >
+        <div class="copyright  ">
+         <span class="me-2"> &copy; Copyright 2025</span><strong><span>SellforAnything</span></strong>. All Rights Reserved
+        </div>
+        
+      </div>
+    </footer>
+    <!-- footer -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script> -->
+</body>
+</html>

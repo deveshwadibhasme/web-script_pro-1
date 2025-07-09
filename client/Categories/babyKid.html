@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-commerce Navbar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="script.js" defer type="module"></script>
+
+ <link rel="stylesheet" href="style.css">
+  <style>
+                /* Banner */
+    .electronics-pro-banner {
+    background-color: #dcdcdc;
+  }
+
+  .electronics-pro-banner h1 {
+    font-size: 2.5rem;
+  }
+
+  .electronics-pro-banner .pro-banner-img {
+    max-height: 350px;
+    object-fit: contain;
+    transition: transform 0.4s;
+  }
+
+  .electronics-pro-banner .pro-banner-img:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .electronics-pro-banner h1 {
+      font-size: 2rem;
+    }
+
+    .electronics-pro-banner .pro-banner-img {
+      max-height: 250px;
+    }
+  }
+
+  
+
+
+  .product-img {
+    transition: transform 0.4s;
+    object-fit: cover;
+    height: 200px;
+  }
+  .product-img:hover {
+    transform: scale(1.02);
+  }                /* Banner */
+    .electronics-pro-banner {
+    background-color: #dcdcdc;
+  }
+
+  .electronics-pro-banner h1 {
+    font-size: 2.5rem;
+  }
+
+  .electronics-pro-banner .pro-banner-img {
+    max-height: 350px;
+    object-fit: contain;
+    transition: transform 0.4s;
+  }
+
+  .electronics-pro-banner .pro-banner-img:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .electronics-pro-banner h1 {
+      font-size: 2rem;
+    }
+
+    .electronics-pro-banner .pro-banner-img {
+      max-height: 250px;
+    }
+  }
+
+  
+
+
+  .product-img {
+    transition: transform 0.4s;
+    object-fit: cover;
+    height: 200px;
+  }
+  .product-img:hover {
+    transform: scale(1.02);
+  }                /* Banner */
+    .electronics-pro-banner {
+    background-color: #dcdcdc;
+  }
+
+  .electronics-pro-banner h1 {
+    font-size: 2.5rem;
+  }
+
+  .electronics-pro-banner .pro-banner-img {
+    max-height: 350px;
+    object-fit: contain;
+    transition: transform 0.4s;
+  }
+
+  .electronics-pro-banner .pro-banner-img:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    .electronics-pro-banner h1 {
+      font-size: 2rem;
+    }
+
+    .electronics-pro-banner .pro-banner-img {
+      max-height: 250px;
+    }
+  } 
+
+
+  .product-img {
+    transition: transform 0.4s;
+    object-fit: cover;
+    height: 200px;
+  }
+  .product-img:hover {
+    transform: scale(1.02);
+  }      
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark navbar-expand-lg navbar-custom px-2 sticky-top">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold" href="../index.html"><img src="./images/logo.png" alt="logo" style="width: 220px ; height: auto;"></a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon "></span>
+    </button>
+
+    <!-- Navbar links and search -->
+    <div class="collapse navbar-collapse px-2" id="navbarContent">
+
+      <!-- Left side -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+
+        <!-- Categories Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Categories
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="./electronic.html">Electronics</a></li>
+            <li><a class="dropdown-item" href="./fashion.html">Fashion</a></li>
+            <li><a class="dropdown-item" href="./homeKitchen.html">Home & Kitchen</a></li>
+            <li><a class="dropdown-item" href="./books.html">Books</a></li>
+            <li><a class="dropdown-item" href="./beauty.html">Beauty & Personal Care</a></li>
+            <li><a class="dropdown-item" href="./grocery.html">Grocery & Food</a></li>
+            <li><a class="dropdown-item" href="./sports.html">Sports & Outdoor</a></li>
+            <li><a class="dropdown-item" href="./toys.html">Toys & Games</a></li>
+            <li><a class="dropdown-item" href="./babyKid.html">Baby & Kids</a></li>
+            <li><a class="dropdown-item" href="./stationery.html">Stationery</a></li>
+            <li><a class="dropdown-item" href="./accessories.html">Accessories</a></li>
+            <li><a class="dropdown-item" href="./devices.html">Devices</a></li>
+            <li><a class="dropdown-item" href="./travel.html">Travel & Luggage</a></li>
+            <li><a class="dropdown-item" href="./furniture.html">Furniture</a></li>
+            <li><a class="dropdown-item" href="./art.html">Art & Crafts</a></li>
+            <li><a class="dropdown-item" href="./jewelry.html">Jewelry</a></li>
+
+          </ul>
+        </li>
+
+        <!-- Contact -->
+        <li class="nav-item">
+          <a class="nav-link" href="../contact.html">Contact</a>
+        </li>
+
+        <!-- Offers -->
+        <li class="nav-item">
+          <a class="nav-link" href="../offers.html"><i class="fas fa-tag" style="color:#EF990F ;"></i> Offers</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="../sell.html"><i class="fas fa-dollar-sign" style="color:#EF990F ;"></i> Sell</a>
+        </li>
+      </ul>
+
+    <!-- Search Bar -->
+      <form class="d-flex mx-lg-3 search-bar my-2 my-lg-0" role="search" >
+        <input class="form-control search-input text-dark rounded-start " type="search" placeholder="Search products" aria-label="Search" >
+        <button class="btn btn-warning search-button rounded-end" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+
+      <!-- Right side -->
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">   <!-- Orders -->
+          <a class="nav-link" href="../orders.html"><i class="fas fa-box me-2" style="color:#EF990F ;"></i>Orders</a>
+        </li>
+        <li class="nav-item">  <!-- Cart -->
+          <a class="nav-link" href="../cart.html"><i class="fa-solid fa-cart-shopping" style="color:#EF990F ;"></i> Cart</a>
+        </li>
+        <li class="nav-item">  <!-- Login -->
+          <a class="nav-link" href="../login.html"><i class="fa-solid fa-user" style="color:#EF990F ;"></i> Login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<!-- Banner -->
+<section class="electronics-pro-banner py-2 ">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      
+      <!-- Text Column -->
+      <div class="col-md-6 text-center text-md-start">
+        <h1 class="fw-bold  mb-3" style="color: #7004b4;">Search For Baby And Kid Products </h1>
+        <p class=" text-muted mb-4">
+          Discover our carefully curated collection of Baby and Kid Products designed to keep your little ones safe, comfortable, and happy. From gentle skincare essentials to fun and educational toys, soft clothing, and nursery must-haves, our range combines quality, safety, and style. Shop with confidence knowing each item is selected to support your child’s growth and your peace of mind. 
+        </p>
+        <a href="beauty.html" class="btn btn-primary btn-lg px-4">
+          Shop Now
+        </a>
+      </div>
+
+      <!-- Image Column -->
+      <div class="col-md-6 text-center">
+        <img 
+          src="https://png.pngtree.com/png-vector/20240913/ourmid/pngtree-baby-product-png-image_12897438.png" 
+          alt="Baby and Kid Banner" 
+          class="img-fluid pro-banner-img"
+        >
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+<!-- Toys And Games Page  -->
+ <section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4 text-primary">Baby And Kid Products  </h2>
+
+    <div class="row g-4">
+
+    <!-- Product 1 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm ">
+        <div class="p-3"> <!-- Added padding wrapper -->
+          <img 
+            src="https://www.pngarts.com/files/11/Cosmetics-Baby-Products-Free-PNG-Image.png"
+            class="card-img-top product-img" 
+            alt="Smartwatch">
+        </div>
+        <div class="card-body text-center">
+          <h6 class="fw-bold mb-2">Cosmetics Baby Products </h6>
+          <p class="text-success fw-semibold mb-3">₹ 499 Only</p>
+         <div class="d-flex justify-content-center flex-nowrap gap-3">
+        <a href="#" class="btn btn-primary btn-sm text-nowrap">Add to Cart</a>
+        <a href="#" class="btn btn-success btn-sm text-nowrap">Buy Now</a>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm ">
+        <div class="p-3"> <!-- Added padding wrapper -->
+          <img 
+            src="https://images.ctfassets.net/nint9a7e0x1s/3d0uoHh9EAoSANjDN9tPsK/fb03e1fdbcbcfba4162220ce77e355cc/SwaddlersHealthcare.png"
+            class="card-img-top product-img" 
+            alt="Smartwatch">
+        </div>
+        <div class="card-body text-center">
+          <h6 class="fw-bold mb-2">Pampers Baby dry </h6>
+          <p class="text-success fw-semibold mb-3">₹ 249</p>
+          <div class="d-flex justify-content-center flex-nowrap gap-3">
+            <a href="#" class="btn btn-primary btn-sm text-nowrap">Add to Cart</a>
+            <a href="#" class="btn btn-success btn-sm text-nowrap">Buy Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm ">
+        <div class="p-3"> <!-- Added padding wrapper -->
+          <img 
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpFYMnSuTHYcC_d2Fq41Aym9QDLuPI9_uDwRTekbqunsWI_WIDJg3sa3L8I4_UnaoYnSA&usqp=CAU"
+            class="card-img-top product-img" 
+            alt="Smartwatch">
+        </div>
+        <div class="card-body text-center">
+          <h6 class="fw-bold mb-2">Tricycles for baby</h6>
+          <p class="text-success fw-semibold mb-3">₹ 3,449</p>
+          <div class="d-flex justify-content-center flex-nowrap gap-3">
+            <a href="#" class="btn btn-primary btn-sm text-nowrap">Add to Cart</a>
+            <a href="#" class="btn btn-success btn-sm text-nowrap">Buy Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm ">
+        <div class="p-3"> <!-- Added padding wrapper -->
+          <img 
+            src="https://png.pngtree.com/png-clipart/20241009/original/pngtree-children-play-together-with-toys-png-image_16250289.png"
+            class="card-img-top product-img" 
+            alt="Smartwatch">
+        </div>
+        <div class="card-body text-center">
+          <h6 class="fw-bold mb-2">Kid indoor Toys</h6>
+          <p class="text-success fw-semibold mb-3">₹ 799</p>
+          <div class="d-flex justify-content-center flex-nowrap gap-3">
+            <a href="#" class="btn btn-primary btn-sm text-nowrap">Add to Cart</a>
+            <a href="#" class="btn btn-success btn-sm text-nowrap">Buy Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- Footer Sction -->
+    <footer id="footer">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-lg-3 col-md-6 footer-contact">
+              <h4> Sell4Anything</h4>
+              <ul class="li">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../about.html">About Us</a></li>
+              <li><a href="../contact.html">Contact</a></li>
+              <li><a href="../terms.html">Terms & Condition</a></li>
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Usefull Links</h4>
+             <ul>
+              <li><a href="../privacy.html">Privacy policy</a></li>
+              <li><a href="../deals.html">Famous Deals</a></li>
+              <li><a href="../service.html">Services</a></li>
+              <li><a href="../cart.html">Cart</a></li>
+              
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Other Links</h4>
+             <ul>
+              <li><a href="../offers.html">Offers</a></li>
+              <li><a href="../faq.html">FAQ / Help</a></li>
+              <li><a href="../sell.html">Start Affiliate</a></li>
+              <li><a href="../profile.html">Your Profile</a></li>
+             </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 footer-links">
+              <h4>Our Social Networks</h4>
+              <p> With Our Social Networks You Can Join Us with Buying & selling Plenty Of Products .</p>
+
+              <div class="socail-links mt-3">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="container " >
+        <div class="copyright  ">
+         <span class="me-2"> &copy; Copyright 2025</span><strong><span>SellforAnything</span></strong>. All Rights Reserved
+        </div>
+        
+      </div>
+    </footer>
+    <!-- footer -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script> -->
+</body>
+</html>
