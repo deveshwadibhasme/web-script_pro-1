@@ -36,6 +36,9 @@ const logIn = () => {
                 window.location.href = '/';
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Logout</a>'
             }
+            // if (result === 'admin') {
+            //     window.location.href = '/admin.html';
+            // }
             alert('Login successful! Redirecting to home page...');
             return true;
         } catch (error) {

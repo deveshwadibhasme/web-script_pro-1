@@ -1,7 +1,8 @@
 
 
 let checkCookies = cookieStore?.get('token').then(token => {
-    if (token?.value !== 'undefined') {
+    console.log(token);
+    if (token.value !== 'null') {
         return [true,token?.value];
     }
     else {
