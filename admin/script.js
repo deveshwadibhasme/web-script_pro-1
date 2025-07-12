@@ -131,13 +131,13 @@ const fetchProducts = async () => {
             PanelData?.products.forEach(product => {
                 const productRow = document.createElement('tr');
                 productRow.innerHTML = `
-          <td>${product.productId}</td>
-          <td><img src="${product.imageUrl}" alt="Product" class="img-thumbnail"></td>
-          <td>${product.name}</td>
-          <td>Rs ${product.price}</td>
-          <td>${product.stock}</td>
-          <td>${product.category}</td>
-          <td>
+                    <td>${product.productId}</td>
+                    <td><img src="${product.imageUrl}" alt="Product" class="img-thumbnail"></td>
+                    <td>${product.name}</td>
+                    <td>Rs ${product.price}</td>
+                    <td>${product.stock}</td>
+                    <td>${product.category}</td>
+                    <td>
             <button class="btn btn-sm btn-primary me-1" data-bs-toggle="modal" data-bs-target="#editProductModal">
               <i class="fas fa-edit"></i>
             </button>
@@ -147,7 +147,28 @@ const fetchProducts = async () => {
           </td>
             `;
                 productTable.appendChild(productRow);
-            })
+            });
+            const customerTable = document.querySelector('.customer-table');
+            customerTable.innerHTML = '';
+            PanelData?.users.forEach(user => {
+                const userRow = document.createElement('tr');
+                userRow.innerHTML = `
+                    <td>${(user._id).slice(0,5)}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.date || 'No Info'}</td>
+                    <td><span class="badge bg-success">Active</span></td>
+                    <td>
+            <button class="btn btn-sm btn-info me-1 text-white" data-bs-toggle="modal" data-bs-target="#viewCustomerModal">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-danger">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>`
+                customerTable.appendChild(userRow);
+        })
         })
         .catch(error => console.error('Error fetching products:', error));
 }

@@ -14,11 +14,11 @@ router.post('/register', async (req, res) => {
     if (!req.body || !req.body.username || !req.body.password || !req.body.email) {
         return res.status(400).json({ message: 'Missing username, password, or email' });
     }
-    const { email, username, password, address, number } = req.body;
+    const { email, username, password, address, phone } = req.body;
     const hash = await bcrypt.hash(password, 10);
     const userEmail = await User.findOne({ email });
     if (userEmail) return res.json({ message: 'Email already exists' });
-    const user = new User({ email, username, password: hash, address, number });
+    const user = new User({ email, username, password: hash, address, phone });
     await user.save();
     res.json({ message: 'Registered' });
 });

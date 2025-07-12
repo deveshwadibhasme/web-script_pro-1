@@ -4,11 +4,11 @@ SignUp();
 logIn();
 
 import { checkCookies, logInCheck } from './scripts/utils.js';
-import { addToCart, getCartItems } from './scripts/cart.js';
+import { getCartItems } from './scripts/cart.js';
 
 const allProductCards = document.querySelectorAll('.card a');
 const loginButton = document.querySelectorAll('.navbar-nav .nav-item .nav-link')[6];
-const userCart = []
+let userCart = []
 
 logInCheck.then(([isLoggedIn]) => {
     console.log(isLoggedIn);
@@ -22,7 +22,6 @@ logInCheck.then(([isLoggedIn]) => {
             cookieStore.delete('token').then(() => {
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Login</a>'
                 alert('You have been logged out successfully.');
-                // Optionally, you can redirect to the home page or reload the page
                 // window.location.reload();
             }).catch(error => {
                 console.error('Error logging out:', error);
@@ -30,7 +29,8 @@ logInCheck.then(([isLoggedIn]) => {
             });
         });
         getCartItems().then(cartItems => {
-            userCart.push(cartItems)
+            userCart = [{ cart: cartItems }]
+
         });
     }
     else {
@@ -42,5 +42,7 @@ logInCheck.then(([isLoggedIn]) => {
 
 const addToCartLinks = Array.from(allProductCards).filter(link => link.innerText.trim() === 'Add to Cart');
 addToCartLinks.forEach(card => {
-    console.log(card.id);
+    card.addEventListener('click', (event) => {
+        console.log(event.id);
+    })
 })
