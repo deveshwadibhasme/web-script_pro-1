@@ -1,5 +1,5 @@
 const LOCAL_URL = 'http://localhost:5000/register';
-    const PROD_URL = 'https://your-production-url.com/register';
+    const PROD_URL = 'process.env.BackendURL/register';
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
 const SignUp = () => {

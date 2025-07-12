@@ -1,5 +1,5 @@
 const LOCAL_URL = 'http://localhost:5000/login';
-const PROD_URL = 'https://your-production-url.com/login';
+const PROD_URL = 'process.env.BackendURL/login';
 const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
 const logIn = () => {
@@ -30,8 +30,8 @@ const logIn = () => {
             }
             console.log('Login successful:', result);
             cookieStore.set('token', result.token, { path: '/' });
-            cookieStore.set('user', JSON.stringify(result.role), { path: '/' });
-            cookieStore.set('username', JSON.stringify(result.username), { path: '/' });
+            // cookieStore.set('user', JSON.stringify(result.role), { path: '/' });
+            // cookieStore.set('username', JSON.stringify(result.username), { path: '/' });
             if (result) {
                 window.location.href = '/';
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Logout</a>'

@@ -2,7 +2,7 @@ import { checkCookies } from "./utils.js";
 
 export const getCartItems = () => {
     const LOCAL_URL = 'http://localhost:5000/user/panel';
-    const PROD_URL = 'https://your-production-url.com/user/panel'; 
+    const PROD_URL = 'process.env.BackendURL/user/panel'; 
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
     const cartItems = checkCookies.then(async (result) => {
@@ -34,31 +34,4 @@ export const getCartItems = () => {
         return [];
     });
     return cartItems;
-}
-
-export const addToCart = async (productId) => {
-    const LOCAL_URL = 'http://localhost:5000/user/cart';
-    const PROD_URL = 'https://your-production-url.com/user/cart';
-    const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${cookieStore.get('token')?.value}`
-            },
-            body: JSON.stringify({ productId })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to add item to cart');
-        }
-
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error('Error adding item to cart:', error);
-        throw error;
-    }
 }

@@ -44,6 +44,13 @@
 }
 
 
+.img-thumbnail{
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px;
+  max-width: 100%;
+  height: 100px;
+}
 
 
 

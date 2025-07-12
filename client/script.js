@@ -42,25 +42,5 @@ logInCheck.then(([isLoggedIn]) => {
 
 const addToCartLinks = Array.from(allProductCards).filter(link => link.innerText.trim() === 'Add to Cart');
 addToCartLinks.forEach(card => {
-    card.addEventListener('click', () => {
-        logInCheck.then(isLoggedIn => {
-            if (!isLoggedIn[0]) {
-                alert('Please log in to add items to your cart.');
-                return;
-            }
-            console.log(card);
-            addToCart(card).then(response => {
-                if (response.success) {
-                    alert('Item added to cart successfully!');
-                } else {
-                    alert('Failed to add item to cart.');
-                }
-            }).catch(error => {
-                console.error('Error adding item to cart:', error);
-                alert('An error occurred while adding the item to your cart.');
-            });
-        }).catch(error => {
-            console.error('Error checking login status:', error);
-        })
-    });
+    console.log(card.id);
 })
