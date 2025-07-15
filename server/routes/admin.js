@@ -71,13 +71,5 @@ router.post('/add-products', auth, (req, res) => {
 });
 
 
-// router.get('/products', auth, async (req, res) => {
-//     try {
-//         const products = await Product.find({ adminId: req.user.id });
-//         res.json(products);
-//     } catch (err) {
-//         console.error('Error fetching products:', err);
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// });
+
 module.exports = router;

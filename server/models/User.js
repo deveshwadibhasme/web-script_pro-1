@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
     address: String,
     phone: { type: Number, required: true, unique: true },
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
-    cart: [{ name: String, imageUrl: String, productId: String, quantity: Number, price: Number }],
+    cart: [{
+        _id: false,
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        quantity: { type: Number, default: "1" }
+    }],
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
 });
 

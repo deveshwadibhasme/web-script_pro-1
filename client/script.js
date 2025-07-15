@@ -4,11 +4,48 @@ SignUp();
 logIn();
 
 import { checkCookies, logInCheck } from './scripts/utils.js';
-import { getCartItems } from './scripts/cart.js';
+import { addToCart, getFeaturedProduct, getUserPanelData } from './scripts/user.js';
 
-const allProductCards = document.querySelectorAll('.card a');
 const loginButton = document.querySelectorAll('.navbar-nav .nav-item .nav-link')[6];
-let userCart = []
+const FeaturedScroll = document?.querySelector('.featured-scroll')
+
+
+getFeaturedProduct().then(data => {
+    data.forEach((dt) => {
+        const featuredDiv = document.createElement('div')
+        featuredDiv.className = 'product-card card flex-shrink-0'
+        featuredDiv.setAttribute('data-product-id', dt.productId)
+        featuredDiv.innerHTML = `
+        <img src=${dt.imageUrl} class="product-img" alt="${dt.name}">
+      <div class="product-body">
+        <h6 class="product-title" title="Stylish Sneakers">${dt.name}</h6>
+        <p class="product-price">₹${dt.price}</p>
+        <span class="stock-badge ${data.stock !== 0 ? 'in-stock' : 'out-of-stock'}"">${data.stock !== 0 ? 'In Stock' : 'Out of stock'}</span>
+        <a href= "" style="margin-top: 50px" class="btn btn-sm btn-primary w-100 mt-2">Add to Cart</a>
+      </div>
+        `
+        FeaturedScroll?.append(featuredDiv)
+    })
+    const allProductCards = document?.querySelectorAll('.featured-scroll .card a');
+    const addToCartLinks = Array.from(allProductCards)
+    .filter(link => link.innerText.trim() === 'Add to Cart');
+    addToCartLinks.forEach(card => {
+        card.addEventListener('click', (event) => {
+            logInCheck.then(([isLoggedIn]) => {
+                if (!isLoggedIn) {
+                    alert('Please log in to add items to your cart.');
+                    return;
+                }
+                const cartData = JSON.parse(localStorage.getItem('userCart'));
+                console.log(cartData);
+                // card.innerText = `Add to Cart (${})`
+                event.preventDefault();
+                const productId = card.parentElement.parentElement.getAttribute('data-product-id');
+                addToCart(productId)
+            });
+        })
+    })
+})
 
 logInCheck.then(([isLoggedIn]) => {
     console.log(isLoggedIn);
@@ -18,19 +55,16 @@ logInCheck.then(([isLoggedIn]) => {
     if (isLoggedIn) {
         loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Logout</a>';
         loginButton.addEventListener('click', () => {
-            // loginButton.innerHTML = isLoggedIn ? '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Logout</a>' : '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Login</a>';
             cookieStore.delete('token').then(() => {
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Login</a>'
                 alert('You have been logged out successfully.');
-                // window.location.reload();
             }).catch(error => {
                 console.error('Error logging out:', error);
                 alert('An error occurred while logging out.');
             });
         });
-        getCartItems().then(cartItems => {
-            userCart = [{ cart: cartItems }]
-
+        getUserPanelData().then(panelData => {
+            console.log(panelData)
         });
     }
     else {
@@ -40,9 +74,3 @@ logInCheck.then(([isLoggedIn]) => {
     }
 })
 
-const addToCartLinks = Array.from(allProductCards).filter(link => link.innerText.trim() === 'Add to Cart');
-addToCartLinks.forEach(card => {
-    card.addEventListener('click', (event) => {
-        console.log(event.id);
-    })
-})

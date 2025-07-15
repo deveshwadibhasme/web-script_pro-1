@@ -1,15 +1,22 @@
 const productTable = document.querySelector('.product-table');
 const productForm = document.querySelector('.add-product-form');
 
-
 const LOCAL_URL = 'http://localhost:5000/login';
 const PROD_URL = 'process.env.BackendURL/login';
 const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
+
+const Toaster = (text) => {
+    const toRender = `<div style="width: 300px;height:30px ;border-radius: 30px;background-color: #fff;font-family: sans-serif;position: absolute;top: 20px;left: 50%;z-index: 200; text-align: center;padding-top: 3px;transform: translateX(-50%);" class="toaster">
+      ${text}
+  </div>`
+  return toRender
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     const token = document.cookie
         .split('; ')
-        .find(row => row.startsWith('token='))
+        .find(row => row.startsWith('adminToken='))
         ?.split('=')[1];
 
     if (!token && window.location.pathname !== '/login.html') {
@@ -42,7 +49,7 @@ loginForm?.addEventListener('submit', async (e) => {
             alert('Invalid email or password. Please try again.');
             return false;
         }
-        cookieStore.set('token', result.token, { path: '/' });
+        cookieStore.set('adminToken', result.token, { path: '/' });
         cookieStore.set('user', JSON.stringify(result.role), { path: '/' });
         // cookieStore.set('username', JSON.stringify(result.username), { path: '/' });
         if (result) {
@@ -52,7 +59,7 @@ loginForm?.addEventListener('submit', async (e) => {
         // if (result === 'admin') {
         //     window.location.href = '/admin.html';
         // }
-        alert('Login successful! Redirecting to home page...');
+        alert(`Hello ${result.username} ,Login successful! Redirecting to home page...`);
         return true;
     } catch (error) {
         console.error('Error:', error);
@@ -61,8 +68,6 @@ loginForm?.addEventListener('submit', async (e) => {
     return false;
 })
 
-
-
 const addProduct = async (e) => {
     const LOCAL_URL = 'http://localhost:5000/admin/add-products';
     const PROD_URL = 'process.env.BackendURL/admin/add-products';
@@ -70,7 +75,7 @@ const addProduct = async (e) => {
 
     e.preventDefault();
     const formData = new FormData(productForm);
-    const tokenCookie = await cookieStore.get('token');
+    const tokenCookie = await cookieStore.get('adminToken');
 
     if (!tokenCookie || !tokenCookie.value) {
         console.error('No token found in cookie store. Please log in.');
@@ -100,12 +105,15 @@ const addProduct = async (e) => {
 
     } catch (error) {
         console.error('Error adding item to cart:', error);
+        alert('Fix your Time or its server error!');
         throw error;
     }
 }
 
-const fetchProducts = async () => {
-    const tokenCookie = await cookieStore.get('token');
+productForm?.addEventListener('submit', addProduct);
+
+const fetchPanelData = async () => {
+    const tokenCookie = await cookieStore.get('adminToken');
 
     if (!tokenCookie || !tokenCookie.value) {
         console.error('No token found in cookie store. Please log in.');
@@ -126,7 +134,7 @@ const fetchProducts = async () => {
                 return;
             }
             const PanelData = { products: data.products, users: data.users, order: data.order };
-            productTable.innerHTML = ''; 
+            productTable.innerHTML = '';
             console.log('PanelData:', PanelData);
             PanelData?.products.forEach(product => {
                 const productRow = document.createElement('tr');
@@ -153,7 +161,7 @@ const fetchProducts = async () => {
             PanelData?.users.forEach(user => {
                 const userRow = document.createElement('tr');
                 userRow.innerHTML = `
-                    <td>${(user._id).slice(0,5)}</td>
+                    <td>${(user._id).slice(0, 5)}</td>
                     <td>${user.username}</td>
                     <td>${user.email}</td>
                     <td>${user.phone}</td>
@@ -168,11 +176,9 @@ const fetchProducts = async () => {
             </button>
           </td>`
                 customerTable.appendChild(userRow);
-        })
+            })
         })
         .catch(error => console.error('Error fetching products:', error));
 }
+fetchPanelData();
 
-fetchProducts();
-
-productForm?.addEventListener('submit', addProduct);
