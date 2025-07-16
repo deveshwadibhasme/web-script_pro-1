@@ -1,6 +1,6 @@
-import SignUp from './scripts/signUpForm.js';
 import logIn from './scripts/logInForm.js';
-SignUp();
+import {VerifiedSignUp} from './scripts/verifyToSignup.js';
+VerifiedSignUp()
 logIn();
 
 import { checkCookies, logInCheck } from './scripts/utils.js';

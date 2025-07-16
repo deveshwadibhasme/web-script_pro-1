@@ -2,7 +2,7 @@ import { checkCookies } from "./utils.js";
 
 export const getUserPanelData = () => {
     const LOCAL_URL = 'http://localhost:5000/user/panel';
-    const PROD_URL = 'process.env.BackendURL/user/panel';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/panel';
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
     const userPanelData = checkCookies.then(async (result) => {
@@ -38,7 +38,7 @@ export const getUserPanelData = () => {
 
 export const getFeaturedProduct = async () => {
     const LOCAL_URL = 'http://localhost:5000/user/featured-product';
-    const PROD_URL = 'process.env.BackendURL/user/featured-product';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/featured-product';
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
     try {
@@ -61,7 +61,7 @@ export const getFeaturedProduct = async () => {
 
 export const addToCart = (productId) => {
     const LOCAL_URL = 'http://localhost:5000/user/add-to-cart';
-    const PROD_URL = 'process.env.BackendURL/user/add-to-cart';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/add-to-cart';
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
     checkCookies.then(async (result) => {
@@ -102,7 +102,7 @@ export const addToCart = (productId) => {
 
 const renderInCart = () => {
     const LOCAL_URL = 'http://localhost:5000/user/get-cart';
-    const PROD_URL = 'process.env.BackendURL/user/get-cart';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/get-cart';
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
     checkCookies.then( async (result)=>{

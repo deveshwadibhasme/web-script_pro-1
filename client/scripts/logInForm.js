@@ -1,5 +1,5 @@
 const LOCAL_URL = 'http://localhost:5000/login';
-const PROD_URL = 'process.env.BackendURL/login';
+const PROD_URL = 'https://ecomm-webscript.onrender.com/login';
 const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
 const logIn = () => {
