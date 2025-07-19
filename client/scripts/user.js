@@ -202,27 +202,28 @@ const renderInCart = () => {
                 if (grossTotal.length <= valueArray.length) {
                     const totalValue = valueArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
                     totalPrice.innerHTML = '₹' + totalValue
-                    grandTotal.innerHTML = '₹' +(totalValue + 100)
+                    grandTotal.innerHTML = '₹' + (totalValue + 100)
                     grandTotal.setAttribute('value', totalValue + 100)
                 }
             }
             updatePrice()
             if (quantityControl) {
                 quantityControl.forEach(control => {
-                    // Prevent duplicate listeners by removing any existing one first
                     control.removeEventListener('change', handleQuantityChange);
                     control.addEventListener('change', handleQuantityChange);
                     if (control.id === 'delete') {
                         control.addEventListener('click', handleQuantityChange);
                     }
                 });
+                let debounceTimer = null; 
                 function handleQuantityChange(e) {
                     const newValue = e.target.value || -1;
                     const productId = e.target.dataset.productId || e.dataset.productId;
-                    const timer = setTimeout(() => {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
                         controlQuantity(newValue, productId, [result[1]]);
-                        console.log('2')
-                    }, 1000)
+                        console.log('Debounced update');
+                    }, 1500);
                 }
             }
 
