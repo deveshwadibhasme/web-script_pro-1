@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
     if (result.success) {
         return res.json({ message: 'OTP sent to email' });
     } else {
-        return res.status(500).json({ message: 'Failed to send OTP email', error: result.error.message });
+        return res.status(500).json({ message: 'Failed to send OTP email', error: result.error });
     }
     // if (!req.body || !req.body.username || !req.body.password || !req.body.email) {
     //     return res.status(400).json({ message: 'Missing username, password, or email' });
@@ -89,6 +89,10 @@ router.post('/verify-otp', async (req, res) => {
     }
     if (record.role === 'user') {
         const user = new User({ email, username, address, phone, password: hash });
+        const existingPhone = await User.findOne({ phone });
+        if (existingPhone) {
+            return res.status(409).json({ message: 'Phone number already registered' });
+        }
         await user.save();
     }
 

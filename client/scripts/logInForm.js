@@ -1,3 +1,5 @@
+import { Toaster } from "./utils.js";
+
 const LOCAL_URL = 'http://localhost:5000/login';
 const PROD_URL = 'https://ecomm-webscript.onrender.com/login';
 const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
@@ -25,11 +27,11 @@ const logIn = () => {
 
             const result = await response.json();
             if (result.message === 'Invalid Credentials') {
-                alert('Invalid email or password. Please try again.');
+                Toaster('Invalid email or password. Please try again.');
                 return false;
             }
             if (result.role === 'admin') {
-                alert(`Check Credentials`);
+                Toaster(`Check Credentials`);
                 window.location.href = '/login.html';
                 return false;
             }
@@ -41,11 +43,11 @@ const logIn = () => {
                 window.location.href = '/';
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Logout</a>'
             }
-            alert(`Hello ${result.username},  Login successful! Redirecting to home page...`);
+            Toaster(`Hello ${result.username},  Login successful! Redirecting to home page...`);
             return true;
         } catch (error) {
             console.error('Error:', error);
-            alert('Login failed. Please check your credentials and try again.');
+            Toaster('Login failed. Please check your credentials and try again.');
         }
         return false;
     })

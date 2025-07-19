@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     password: String,
     address: String,
     phone: { type: Number, required: true, unique: true },
+    adminRestrict: { type: Boolean, default: false },
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
     cart: [{
         _id: false,

@@ -108,8 +108,8 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
+        <tbody class="cart-list">
+          <!-- <tr>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://via.placeholder.com/60" class="rounded me-2" alt="Product Image" />
@@ -126,8 +126,8 @@
                 <i class="fas fa-trash"></i>
               </button>
             </td>
-          </tr>
-          <tr>
+          </tr> -->
+          <!-- <tr>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://via.placeholder.com/60" class="rounded me-2" alt="Product Image" />
@@ -144,7 +144,7 @@
                 <i class="fas fa-trash"></i>
               </button>
             </td>
-          </tr>
+          </tr> -->
           <!-- Add more cart items as needed -->
         </tbody>
       </table>
@@ -160,7 +160,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between mb-2">
               <span>Subtotal</span>
-              <span>₹19200</span>
+              <span id="totalPrice">₹0</span>
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span>Shipping</span>
@@ -169,7 +169,7 @@
             <hr>
             <div class="d-flex justify-content-between fw-bold mb-3">
               <span>Total</span>
-              <span>₹19300</span>
+              <span id="grandPrice">₹19300</span>
             </div>
             <a href="checkout.html" class="btn btn-success w-100">
               <i class="fas fa-credit-card"></i> Proceed to Checkout

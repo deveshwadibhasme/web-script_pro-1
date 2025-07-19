@@ -7,11 +7,17 @@ const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
 
 const Toaster = (text) => {
-    const toRender = `<div style="width: 300px;height:30px ;border-radius: 30px;background-color: #fff;font-family: sans-serif;position: absolute;top: 20px;left: 50%;z-index: 200; text-align: center;padding-top: 3px;transform: translateX(-50%);" class="toaster">
+    const toRender = `<div style="width: 300px;max-width: 500px;min-height:50px ;border-radius: 5px;background-color: yellowgreen;font-family: sans-serif;position: absolute;bottom: 20px;left: 30px;z-index: 200; padding-block:5px; padding-inline:5px;border-bottom:2px solid black;font-family: sans-serif;" class="toaster">
       ${text}
   </div>`
-  return toRender
+    const body = document.querySelector('body')
+    body.insertAdjacentHTML('beforeend', toRender)
+    const timer = setTimeout(()=>{
+       toRender.remove()
+       clearTimeout(timer)
+    },1000)
 }
+
 
 window.addEventListener('DOMContentLoaded', () => {
     const token = document.cookie
@@ -46,7 +52,7 @@ loginForm?.addEventListener('submit', async (e) => {
 
         const result = await response.json();
         if (result.message === 'Invalid Credentials') {
-            alert('Invalid email or password. Please try again.');
+            Toaster('Invalid email or password. Please try again.');
             return false;
         }
         cookieStore.set('adminToken', result.token, { path: '/' });
@@ -59,11 +65,11 @@ loginForm?.addEventListener('submit', async (e) => {
         // if (result === 'admin') {
         //     window.location.href = '/admin.html';
         // }
-        alert(`Hello ${result.username} ,Login successful! Redirecting to home page...`);
+        Toaster(`Hello ${result.username} ,Login successful! Redirecting to home page...`);
         return true;
     } catch (error) {
         console.error('Error:', error);
-        alert('Login failed. Please check your credentials and try again.');
+        Toaster('Login failed. Please check your credentials and try again.');
     }
     return false;
 })
@@ -99,13 +105,13 @@ const addProduct = async (e) => {
         }
         // const result = await response.json();
 
-        alert('Product added successfully!');
+        Toaster('Product added successfully!');
         productForm.reset();
         fetchProducts();
 
     } catch (error) {
         console.error('Error adding item to cart:', error);
-        alert('Fix your Time or its server error!');
+        Toaster('Fix your Time or its server error!');
         throw error;
     }
 }

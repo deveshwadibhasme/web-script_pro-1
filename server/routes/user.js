@@ -18,13 +18,12 @@ function auth(req, res, next) {
 
 router.post('/add-to-cart', auth, async (req, res) => {
     try {
-        const { productId, quantity = 1 } = req.body;
-
+        const { productId, quantity } = req.body;
         if (!productId) {
             return res.status(400).json({ message: 'Product ID is required.' });
         }
 
-        const product = await Product.findOne({productId});
+        const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ message: 'Product not found.' });
         }
@@ -35,11 +34,24 @@ router.post('/add-to-cart', auth, async (req, res) => {
         }
 
         const cartItem = user.cart.find(item =>
-            item.product.toString() === productId
+            item.product.toString() === product._id.toString()
         );
 
         if (cartItem) {
-            cartItem.quantity += quantity;
+            if (Number(quantity) < 0) {
+                user.cart = user.cart.filter(item => item.product.toString() !== product._id.toString());
+                await user.save();
+                return res.status(200).json({ message: 'Product removed from cart.' });
+            }
+            if (cartItem.quantity < quantity) {
+                cartItem.quantity = Number(quantity);
+                await user.save();
+                return res.status(200).json({ message: 'Product quantity updated.' });
+            } else if (cartItem.quantity > quantity) {
+                cartItem.quantity = Number(quantity);
+                await user.save();
+                return res.status(200).json({ message: 'Product quantity updated.' });
+            }
         } else {
             user.cart.push({
                 product: product._id,
@@ -105,31 +117,31 @@ router.get('/featured-product', async (req, res) => {
 });
 
 const updateCartQuantity = async (req, res) => {
-  try {
-    const { productId, quantity } = req.body;
+    try {
+        const { productId, quantity } = req.body;
 
-    if (!productId || quantity == null || quantity < 1) {
-      return res.status(400).json({ message: 'Valid productId and quantity are required.' });
+        if (!productId || quantity == null || quantity < 1) {
+            return res.status(400).json({ message: 'Valid productId and quantity are required.' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found.' });
+
+        const item = user.cart.find(item => item.product.toString() === productId);
+
+        if (!item) {
+            return res.status(404).json({ message: 'Product not found in cart.' });
+        }
+
+        item.quantity = quantity;
+        await user.save();
+
+        res.status(200).json({ message: 'Cart updated.', cart: user.cart });
+
+    } catch (err) {
+        console.error('Update quantity error:', err);
+        res.status(500).json({ message: 'Internal server error.' });
     }
-
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found.' });
-
-    const item = user.cart.find(item => item.product.toString() === productId);
-
-    if (!item) {
-      return res.status(404).json({ message: 'Product not found in cart.' });
-    }
-
-    item.quantity = quantity;
-    await user.save();
-
-    res.status(200).json({ message: 'Cart updated.', cart: user.cart });
-
-  } catch (err) {
-    console.error('Update quantity error:', err);
-    res.status(500).json({ message: 'Internal server error.' });
-  }
 };
 
 

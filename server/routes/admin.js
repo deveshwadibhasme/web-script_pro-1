@@ -27,6 +27,39 @@ router.get('/panel', auth, async (req, res) => {
     res.json({ users, order, products });
 });
 
+router.post('/block-user/:userId', auth, async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        user.adminRestrict = true;
+        await user.save();
+        res.status(200).json({ message: 'User blocked successfully.', user });
+    } catch (error) {
+        console.error('Error blocking user:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
+router.post('/unblock-user/:userId', auth, async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        user.adminRestrict = false;
+        await user.save();
+        res.status(200).json({ message: 'User unblocked successfully.', user });
+    } catch (error) {
+        console.error('Error unblocking user:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
+
 router.post('/add-products', auth, (req, res) => {
     upload.single('image')(req, res, async (err) => {
         if (err instanceof multer.MulterError) {

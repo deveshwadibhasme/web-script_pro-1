@@ -4,25 +4,25 @@ let checkCookies = cookieStore?.get('token').then(token => {
 
     if (token && token.value) {
         // console.log("Token found:", token.value); 
-        return [true, token.value]; 
+        return [true, token.value];
     } else {
         console.log('No token found in cookie store, or token value is empty.');
-        return [false, null]; 
+        return [false, null];
     }
 }).catch(error => {
     console.error('Error checking token from cookieStore:', error);
-    return [false, null]; 
+    return [false, null];
 });
 
 
 
 let logInCheck = checkCookies.then(result => {
-    const isLoggedIn = result[0]; 
-    const tokenValue = result[1]; 
+    const isLoggedIn = result[0];
+    const tokenValue = result[1];
 
     if (!isLoggedIn) {
         console.log('User is not logged in based on cookie check (no valid token).');
-        return [false, null]; 
+        return [false, null];
     }
     console.log('User is logged in.');
     return [true, tokenValue];
@@ -32,6 +32,20 @@ let logInCheck = checkCookies.then(result => {
 });
 
 
+const Toaster = (text) => {
+    const toRender = `<div id="toaster" class="toaster">
+      ${text}
+  </div>`
+    const nav = document.querySelector('nav')
+    nav.insertAdjacentHTML('beforeend', toRender)
+    const toaster = document.getElementById('toaster');
+    toaster.classList.add('show');
+    const timer = setTimeout(() => {
+        toaster.classList.remove('show');
+        clearTimeout(timer)
+    }, 2000)
+}
 
 
-export { logInCheck, checkCookies };
+
+export { logInCheck, checkCookies, Toaster };

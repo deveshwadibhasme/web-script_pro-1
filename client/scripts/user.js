@@ -1,4 +1,6 @@
-import { checkCookies } from "./utils.js";
+import { checkCookies, Toaster } from "./utils.js";
+
+
 
 export const getUserPanelData = () => {
     const LOCAL_URL = 'http://localhost:5000/user/panel';
@@ -76,7 +78,7 @@ export const addToCart = (productId) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${[result[1]]}`
                 },
-                body: JSON.stringify({ productId: productId })
+                body: JSON.stringify({ productId })
             });
 
             if (!response.ok) {
@@ -84,10 +86,9 @@ export const addToCart = (productId) => {
             }
             const results = await response.json()
             if (results.message === "Product already in cart.") {
-                alert('Product already in cart.')
+                Toaster('Product already in cart.')
             }
-            alert('Product Added')
-            localStorage.setItem('userCart', JSON.stringify([{ productId: results.product, quantity: results.quantity }]));
+            Toaster('Product Added')
             renderInCart()
         } catch (error) {
             console.error('Error fetching cart items:', error);
@@ -99,32 +100,132 @@ export const addToCart = (productId) => {
     });
 }
 
+const controlQuantity = async (qty, id, token) => {
+    const LOCAL_URL = 'http://localhost:5000/user/add-to-cart';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/add-to-cart';
+    const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
+    try {
+        const response = await fetch(url, {
+            'method': 'POST',
+            'headers': {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ productId: id, quantity: qty })
+        });
+        const result = await response.json()
+        if (result.message === 'Product removed from cart.') {
+            Toaster('Product removed from cart.')
+            renderInCart()
+        }
+        if (result.message === 'Product quantity updated.') {
+            Toaster('Product quantity updated.')
+            renderInCart()
+        }
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch cart items');
+        }
+
+    }
+    catch (error) {
+        console.error('Error fetching cart items:', error);
+        return [];
+    }
+}
 
 const renderInCart = () => {
     const LOCAL_URL = 'http://localhost:5000/user/get-cart';
     const PROD_URL = 'https://ecomm-webscript.onrender.com/user/get-cart';
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
-    checkCookies.then( async (result)=>{
-          if (!result[0]) {
+
+    checkCookies.then(async (result) => {
+        if (!result[0]) {
             console.log('User is not logged in');
+            Toaster('Log in to add item and use cart!!')
             return;
         }
         try {
             const response = await fetch(url, {
                 'method': 'GET',
-               headers: {
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${[result[1]]}`
                 },
             });
-    
+
             if (!response.ok) {
-                alert("Server Error")
+                Toaster("Server Error")
                 throw new Error('Failed to fetch cart items');
             }
-            const resultData = await response.json()
-            console.log(resultData);
+            const { cart } = await response.json()
+            console.log(cart);
+            const cartList = document.querySelector('.cart-list')
+            cartList.innerHTML = ''
+            cart.map(({ product, quantity }) => {
+                const cartDiv = document.createElement('tr')
+                cartDiv.className = 'cart-item'
+                cartDiv.innerHTML = `   
+            <td>
+              <div class="d-flex align-items-center">
+                <img style="width:100px" src=${product.imageUrl} class="rounded me-2" alt="Product Image" />
+                <span>${product.name}</span>
+              </div>
+            </td>
+            <td>₹${product.price}</td>
+            <td>
+              <input type="number" class="form-control quantity-control" name="quantity" data-product-price = ${product.price} data-product-id=${product._id} value=${quantity} min="1">
+            </td>
+            <td class="gross-total" value="0" >₹ 0</td>
+            <td>
+              <button id="delete" value="-1" data-product-id=${product._id} class="btn btn-sm btn-danger quantity-control">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>`
+                cartList?.append(cartDiv)
+            })
+            const quantityControl = document.querySelectorAll('td .quantity-control')
+            const grossTotal = document.querySelectorAll('.gross-total')
+            const grandTotal = document.querySelector('#grandPrice')
+            function updatePrice() {
+                grossTotal.forEach((ele) => {
+                    const price = ele.previousElementSibling.childNodes[1].dataset.productPrice
+                    const quantity = ele.previousElementSibling.childNodes[1].getAttribute('value')
+                    const x = Number(quantity)
+                    ele.previousElementSibling.childNodes[1].setAttribute('value', x)
+                    ele.innerHTML = '₹' + Number(price) * Number(x)
+                    ele.setAttribute('value', Number(price) * Number(x))
+                })
+                const totalPrice = document.querySelector('#totalPrice')
+                const valueArray = Array.from(grossTotal, ele => Number(ele.getAttribute('value')));
+                if (grossTotal.length <= valueArray.length) {
+                    const totalValue = valueArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                    totalPrice.innerHTML = '₹' + totalValue
+                    grandTotal.innerHTML = '₹' +(totalValue + 100)
+                    grandTotal.setAttribute('value', totalValue + 100)
+                }
+            }
+            updatePrice()
+            if (quantityControl) {
+                quantityControl.forEach(control => {
+                    // Prevent duplicate listeners by removing any existing one first
+                    control.removeEventListener('change', handleQuantityChange);
+                    control.addEventListener('change', handleQuantityChange);
+                    if (control.id === 'delete') {
+                        control.addEventListener('click', handleQuantityChange);
+                    }
+                });
+                function handleQuantityChange(e) {
+                    const newValue = e.target.value || -1;
+                    const productId = e.target.dataset.productId || e.dataset.productId;
+                    const timer = setTimeout(() => {
+                        controlQuantity(newValue, productId, [result[1]]);
+                        console.log('2')
+                    }, 1000)
+                }
+            }
+
         } catch (error) {
             console.error('Error fetching cart items:', error);
             return [];

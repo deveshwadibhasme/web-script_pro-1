@@ -3,7 +3,7 @@ import {VerifiedSignUp} from './scripts/verifyToSignup.js';
 VerifiedSignUp()
 logIn();
 
-import { checkCookies, logInCheck } from './scripts/utils.js';
+import { checkCookies, logInCheck, Toaster } from './scripts/utils.js';
 import { addToCart, getFeaturedProduct, getUserPanelData } from './scripts/user.js';
 
 const loginButton = document.querySelectorAll('.navbar-nav .nav-item .nav-link')[6];
@@ -14,7 +14,7 @@ getFeaturedProduct().then(data => {
     data.forEach((dt) => {
         const featuredDiv = document.createElement('div')
         featuredDiv.className = 'product-card card flex-shrink-0'
-        featuredDiv.setAttribute('data-product-id', dt.productId)
+        featuredDiv.setAttribute('data-product-id', dt._id)
         featuredDiv.innerHTML = `
         <img src=${dt.imageUrl} class="product-img" alt="${dt.name}">
       <div class="product-body">
@@ -31,14 +31,12 @@ getFeaturedProduct().then(data => {
     .filter(link => link.innerText.trim() === 'Add to Cart');
     addToCartLinks.forEach(card => {
         card.addEventListener('click', (event) => {
+            event.preventDefault();
             logInCheck.then(([isLoggedIn]) => {
                 if (!isLoggedIn) {
-                    alert('Please log in to add items to your cart.');
+                    Toaster('Please log in to add items to your cart.');
                     return;
                 }
-                const cartData = JSON.parse(localStorage.getItem('userCart'));
-                console.log(cartData);
-                // card.innerText = `Add to Cart (${})`
                 event.preventDefault();
                 const productId = card.parentElement.parentElement.getAttribute('data-product-id');
                 addToCart(productId)
@@ -57,10 +55,10 @@ logInCheck.then(([isLoggedIn]) => {
         loginButton.addEventListener('click', () => {
             cookieStore.delete('token').then(() => {
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Login</a>'
-                alert('You have been logged out successfully.');
+                Toaster('You have been logged out successfully.');
             }).catch(error => {
                 console.error('Error logging out:', error);
-                alert('An error occurred while logging out.');
+                Toaster('An error occurred while logging out.');
             });
         });
         getUserPanelData().then(panelData => {
