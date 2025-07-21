@@ -46,6 +46,28 @@ const Toaster = (text) => {
     }, 2000)
 }
 
+const fetchAllProduct = async () => {
+    const LOCAL_URL = 'http://localhost:5000/user/all-product';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/all-product';
+    const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error('Server Error');
+        }
+
+        const result = await response.json();
+        return result;
+    }
+    catch (error) {
+        console.error('Error:', error);
+        Toaster('internal Server Error');
+    }
+}
 
 
-export { logInCheck, checkCookies, Toaster };
+
+export { logInCheck, checkCookies, Toaster, fetchAllProduct };

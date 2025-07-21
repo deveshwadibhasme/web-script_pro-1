@@ -1,7 +1,6 @@
 import { checkCookies, Toaster } from "./utils.js";
 
 
-
 export const getUserPanelData = () => {
     const LOCAL_URL = 'http://localhost:5000/user/panel';
     const PROD_URL = 'https://ecomm-webscript.onrender.com/user/panel';
@@ -113,7 +112,9 @@ const controlQuantity = async (qty, id, token) => {
             },
             body: JSON.stringify({ productId: id, quantity: qty })
         });
-        const result = await response.json()
+        const result = await response.json()        
+        const cartList = document.querySelector('.cart-list')
+        cartList.innerHTML = ''
         if (result.message === 'Product removed from cart.') {
             Toaster('Product removed from cart.')
             renderInCart()
@@ -122,6 +123,7 @@ const controlQuantity = async (qty, id, token) => {
             Toaster('Product quantity updated.')
             renderInCart()
         }
+
 
         if (!response.ok) {
             throw new Error('Failed to fetch cart items');
@@ -160,9 +162,7 @@ const renderInCart = () => {
                 throw new Error('Failed to fetch cart items');
             }
             const { cart } = await response.json()
-            console.log(cart);
             const cartList = document.querySelector('.cart-list')
-            cartList.innerHTML = ''
             cart.map(({ product, quantity }) => {
                 const cartDiv = document.createElement('tr')
                 cartDiv.className = 'cart-item'
@@ -199,7 +199,7 @@ const renderInCart = () => {
                 })
                 const totalPrice = document.querySelector('#totalPrice')
                 const valueArray = Array.from(grossTotal, ele => Number(ele.getAttribute('value')));
-                if (grossTotal.length <= valueArray.length) {
+                if (grossTotal.length <= valueArray.length && totalPrice && grandTotal) {
                     const totalValue = valueArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
                     totalPrice.innerHTML = '₹' + totalValue
                     grandTotal.innerHTML = '₹' + (totalValue + 100)
@@ -218,7 +218,7 @@ const renderInCart = () => {
                 let debounceTimer = null; 
                 function handleQuantityChange(e) {
                     const newValue = e.target.value || -1;
-                    const productId = e.target.dataset.productId || e.dataset.productId;
+                    const productId = e.target.dataset.productId || e.currentTarget.dataset.productId;;
                     clearTimeout(debounceTimer);
                     debounceTimer = setTimeout(() => {
                         controlQuantity(newValue, productId, [result[1]]);

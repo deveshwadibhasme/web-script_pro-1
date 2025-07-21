@@ -42,8 +42,8 @@ const logIn = () => {
             if (result) {
                 window.location.href = '/';
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Logout</a>'
+                Toaster(`Hello ${result.username},  Login successful! Redirecting to home page...`);
             }
-            Toaster(`Hello ${result.username},  Login successful! Redirecting to home page...`);
             return true;
         } catch (error) {
             console.error('Error:', error);

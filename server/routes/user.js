@@ -2,7 +2,6 @@ const express = require('express');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const Product = require('../models/Product');
-const { find } = require('../models/Order');
 const router = express.Router();
 
 // Auth middleware
@@ -98,6 +97,7 @@ router.get('/panel', auth, async (req, res) => {
 router.get('/all-product', async (req, res) => {
     try {
         const productList = await Product.find({})
+
         res.status(200).json(productList);
     }
     catch (error) {
