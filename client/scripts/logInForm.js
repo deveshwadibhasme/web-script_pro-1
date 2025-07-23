@@ -20,16 +20,23 @@ const logIn = () => {
                 },
                 body: JSON.stringify(data)
             });
-
             if (!response.ok) {
                 throw new Error('Login failed');
             }
 
+
             const result = await response.json();
+
+            if (result.isBlock) {
+                Toaster('You are blocked by admin !!')
+                return false;
+            }
+
             if (result.message === 'Invalid Credentials') {
                 Toaster('Invalid email or password. Please try again.');
                 return false;
             }
+
             if (result.role === 'admin') {
                 Toaster(`Check Credentials`);
                 window.location.href = '/login.html';
@@ -44,6 +51,7 @@ const logIn = () => {
                 loginButton.innerHTML = '<i class="fa-solid fa-user" style="color:#EF990F ;"></i> Logout</a>'
                 Toaster(`Hello ${result.username},  Login successful! Redirecting to home page...`);
             }
+
             return true;
         } catch (error) {
             console.error('Error:', error);

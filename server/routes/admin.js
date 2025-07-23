@@ -36,7 +36,7 @@ router.post('/block-user/:userId', auth, async (req, res) => {
         }
         user.adminRestrict = true;
         await user.save();
-        res.status(200).json({ message: 'User blocked successfully.', user });
+        res.status(200).json({ message: 'User blocked successfully.' });
     } catch (error) {
         console.error('Error blocking user:', error);
         res.status(500).json({ message: 'Internal server error.' });
@@ -52,7 +52,7 @@ router.post('/unblock-user/:userId', auth, async (req, res) => {
         }
         user.adminRestrict = false;
         await user.save();
-        res.status(200).json({ message: 'User unblocked successfully.', user });
+        res.status(200).json({ message: 'User unblocked successfully.'});
     } catch (error) {
         console.error('Error unblocking user:', error);
         res.status(500).json({ message: 'Internal server error.' });

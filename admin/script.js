@@ -7,17 +7,18 @@ const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
 
 
 const Toaster = (text) => {
-    const toRender = `<div style="width: 300px;max-width: 500px;min-height:50px ;border-radius: 5px;background-color: yellowgreen;font-family: sans-serif;position: absolute;bottom: 20px;left: 30px;z-index: 200; padding-block:5px; padding-inline:5px;border-bottom:2px solid black;font-family: sans-serif;" class="toaster">
+    const toRender = `<div id="toaster" class="toaster">
       ${text}
   </div>`
-    const body = document.querySelector('body')
-    body.insertAdjacentHTML('beforeend', toRender)
-    const timer = setTimeout(()=>{
-       toRender.remove()
-       clearTimeout(timer)
-    },1000)
+    const nav = document.querySelector('nav')
+    nav.insertAdjacentHTML('beforeend', toRender)
+    const toaster = document.getElementById('toaster');
+    toaster.classList.add('show');
+    const timer = setTimeout(() => {
+        toaster.classList.remove('show');
+        clearTimeout(timer)
+    }, 2000)
 }
-
 
 window.addEventListener('DOMContentLoaded', () => {
     const token = document.cookie
@@ -162,6 +163,10 @@ const fetchPanelData = async () => {
             `;
                 productTable.appendChild(productRow);
             });
+
+
+
+            //grahak
             const customerTable = document.querySelector('.customer-table');
             customerTable.innerHTML = '';
             PanelData?.users.forEach(user => {
@@ -172,7 +177,12 @@ const fetchPanelData = async () => {
                     <td>${user.email}</td>
                     <td>${user.phone}</td>
                     <td>${user.date || 'No Info'}</td>
-                    <td><span class="badge bg-success">Active</span></td>
+                    <td>
+                    <select class="user-status" style="padding:5px">
+                        <option value=${user.adminRestrict ? "active" : "block"} style="padding:5px" class="badge bg-success">${!user.adminRestrict ? "Active" : "Block"} </option>
+                        <option  value=${!user.adminRestrict ? "active" : "block"} style="padding:5px" class="badge bg-danger">${user.adminRestrict ? "Active" : "Block"} </option>
+                    </select>
+                    </td>
                     <td>
             <button class="btn btn-sm btn-info me-1 text-white" data-bs-toggle="modal" data-bs-target="#viewCustomerModal">
               <i class="fas fa-eye"></i>
@@ -182,9 +192,56 @@ const fetchPanelData = async () => {
             </button>
           </td>`
                 customerTable.appendChild(userRow);
+                const userStatus = document.querySelector('td .user-status')
+                userStatus.addEventListener('input', (input) => {
+                    if (input.target.value === 'active') {
+                        changeUserStatus(`block-user/${user._id}`)
+                    }
+                    if (input.target.value === 'block') {
+                        changeUserStatus(`unblock-user/${user._id}`)
+                    }
+                })
             })
         })
         .catch(error => console.error('Error fetching products:', error));
 }
 fetchPanelData();
+
+const changeUserStatus =  async (endPoint) => {
+    const LOCAL_URL = `http://localhost:5000/admin/${endPoint}`;
+    const PROD_URL = `https://ecomm-webscript.onrender.com/admin/${endPoint}`;
+    const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
+
+    const tokenCookie = await cookieStore.get('adminToken');
+
+    if (!tokenCookie || !tokenCookie.value) {
+        console.error('No token found in cookie store. Please log in.');
+        throw new Error('Authentication token not found.');
+    }
+
+    const token = tokenCookie.value;
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json(); // errorData is an object
+            console.error('Failed to add item:', JSON.stringify(errorData, null, 2)); // <-- Use JSON.stringify for console.error
+            throw new Error(`Failed to add item to cart: ${errorData.message || response.statusText}`);
+        }
+        // const result = await response.json();
+
+        Toaster('User Status Changes successfully!');
+        fetchPanelData()
+
+    } catch (error) {
+        console.error('Error adding item to cart:', error);
+        Toaster('Fix your Time or its server error!');
+        throw error;
+    }
+}
 

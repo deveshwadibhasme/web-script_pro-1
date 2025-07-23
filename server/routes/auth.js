@@ -115,7 +115,7 @@ router.post('/login', async (req, res) => {
         if (!valid) return res.status(400).json({ message: 'Invalid credentials' });
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '1d' });
         res.cookie('token', token);
-        res.json({ token, role: user.role, username: user.username });
+        res.json({ token, role: user.role, username: user.username, isBlock: user.adminRestrict });
     }
     if (admin) {
         const validAdmin = await bcrypt.compare(password, admin.password);

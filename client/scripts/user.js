@@ -1,6 +1,5 @@
 import { checkCookies, Toaster } from "./utils.js";
 
-
 export const getUserPanelData = () => {
     const LOCAL_URL = 'http://localhost:5000/user/panel';
     const PROD_URL = 'https://ecomm-webscript.onrender.com/user/panel';
@@ -68,6 +67,7 @@ export const addToCart = (productId) => {
     checkCookies.then(async (result) => {
         if (!result[0]) {
             console.log('User is not logged in');
+            Toaster('Log in to add item and use cart!!')
             return;
         }
         try {
@@ -145,7 +145,6 @@ const renderInCart = () => {
     checkCookies.then(async (result) => {
         if (!result[0]) {
             console.log('User is not logged in');
-            Toaster('Log in to add item and use cart!!')
             return;
         }
         try {
