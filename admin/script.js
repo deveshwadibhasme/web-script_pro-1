@@ -21,16 +21,16 @@ const Toaster = (text) => {
     }, 2000)
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    const token = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('adminToken='))
-        ?.split('=')[1];
 
-    if (!token && window.location.pathname !== '/login.html') {
-        window.location.href = '/login.html';
-    }
-})
+const token = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('adminToken='))
+    ?.split('=')[1];
+
+if (!token && window.location.pathname !== '/login.html') {
+    window.location.href = '/login.html';
+}
+
 
 const loginButton = document.querySelectorAll('.navbar-nav .nav-item .nav-link')[6];
 const loginForm = document.querySelector('.login-form');
@@ -310,7 +310,7 @@ function editProduct(e) {
     const productId = editForm.querySelector('#productId')
     const stock = editForm.querySelector('#productStock')
     const price = editForm.querySelector('#productPrice')
-    console.dir(e)
+
     if (productId) {
         productId.value = e.target.dataset.productId
         stock.value = e.target.dataset.productStock

@@ -88,7 +88,7 @@ export const addToCart = (productId) => {
                 Toaster('Product already in cart.')
             }
             Toaster('Product Added')
-            renderInCart()
+            CartModule.render()
         } catch (error) {
             console.error('Error fetching cart items:', error);
             return [];
@@ -99,138 +99,138 @@ export const addToCart = (productId) => {
     });
 }
 
-const controlQuantity = async (qty, id, token) => {
-    const LOCAL_URL = 'http://localhost:5000/user/add-to-cart';
-    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/add-to-cart';
-    const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
-    try {
-        const response = await fetch(url, {
-            'method': 'POST',
-            'headers': {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ productId: id, quantity: qty })
-        });
-        const result = await response.json()
-        const cartList = document.querySelector('.cart-list')
-        cartList.innerHTML = ''
-        if (result.message === 'Product removed from cart.') {
-            Toaster('Product removed from cart.')
-            renderInCart()
+const CartModule = (() => {
+    let token = null;
+
+    const LOCAL_URL = 'http://localhost:5000/user';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user';
+    const baseUrl = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
+
+    const updatePrice = () => {
+        const grossTotal = document.querySelectorAll('.gross-total');
+        const totalPrice = document.querySelector('#totalPrice');
+        const grandTotal = document.querySelector('#grandPrice');
+        const valueArray = Array.from(grossTotal, ele => Number(ele.getAttribute('value')) || 0);
+        const totalValue = valueArray.reduce((acc, val) => acc + val, 0);
+        if (totalPrice) totalPrice.innerHTML = '₹' + totalValue;
+        if (grandTotal) {
+            grandTotal.innerHTML = '₹' + (totalValue + 100);
+            grandTotal.setAttribute('value', totalValue + 100);
         }
-        if (result.message === 'Product quantity updated.') {
-            Toaster('Product quantity updated.')
-            renderInCart()
-        }
+    };
 
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch cart items');
-        }
-
-    }
-    catch (error) {
-        console.error('Error fetching cart items:', error);
-        return [];
-    }
-}
-
-const renderInCart = () => {
-    const LOCAL_URL = 'http://localhost:5000/user/get-cart';
-    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/get-cart';
-    const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
-
-
-    checkCookies.then(async (result) => {
-        if (!result[0]) {
-            console.log('User is not logged in');
-            return;
-        }
+    const controlQuantity = async (qty, id) => {
         try {
-            const response = await fetch(url, {
-                'method': 'GET',
+            const response = await fetch(`${baseUrl}/add-to-cart`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${[result[1]]}`
+                    'Authorization': `Bearer ${token}`
                 },
+                body: JSON.stringify({ productId: id, quantity: qty })
             });
 
-            if (!response.ok) {
-                Toaster("Server Error")
-                throw new Error('Failed to fetch cart items');
-            }
-            const { cart } = await response.json()
-            const cartList = document.querySelector('.cart-list')
-            cart.map(({ product, quantity }) => {
-                const cartDiv = document.createElement('tr')
-                cartDiv.className = 'cart-item'
-                cartDiv.innerHTML = `   
-            <td>
-              <div class="d-flex align-items-center">
-                <img style="width:100px" src=${product.imageUrl} class="rounded me-2" alt="Product Image" />
-                <span>${product.name}</span>
-              </div>
-            </td>
-            <td>₹${product.price}</td>
-            <td>
-              <input type="number" class="form-control quantity-control" name="quantity" data-product-price = ${product.price} data-product-id=${product._id} value=${quantity} min="1">
-            </td>
-            <td class="gross-total" value="0" >₹ 0</td>
-            <td>
-              <button id="delete" value="-1" data-product-id=${product._id} class="btn btn-sm btn-danger quantity-control">
-                <i class="fas fa-trash"></i>
-              </button>
-            </td>`
-                cartList?.append(cartDiv)
-            })
-            const quantityControl = document.querySelectorAll('td .quantity-control')
-            const grossTotal = document.querySelectorAll('.gross-total')
-            const grandTotal = document.querySelector('#grandPrice')
-            function updatePrice() {
-                grossTotal.forEach((ele) => {
-                    const price = ele.previousElementSibling.childNodes[1].dataset.productPrice
-                    const quantity = ele.previousElementSibling.childNodes[1].getAttribute('value')
-                    const x = Number(quantity)
-                    quantityControl.value = x
-                    ele.previousElementSibling.childNodes[1].setAttribute('value', x)
-                    ele.innerHTML = '₹' + Number(price) * Number(x)
-                    ele.setAttribute('value', Number(price) * Number(x))
-                })
-                const totalPrice = document.querySelector('#totalPrice')
-                const valueArray = Array.from(grossTotal, ele => Number(ele.getAttribute('value')));
-                if (grossTotal.length <= valueArray.length && totalPrice && grandTotal) {
-                    const totalValue = valueArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-                    totalPrice.innerHTML = '₹' + totalValue
-                    grandTotal.innerHTML = '₹' + (totalValue + 100)
-                    grandTotal.setAttribute('value', totalValue + 100)
-                }
-            }
-            updatePrice()
-            quantityControl.forEach(control => {
-                control.removeEventListener('change', handleQuantityChange);
-                control.addEventListener('change', handleQuantityChange);
-                if (control.id === 'delete') {
-                    control.addEventListener('click', handleQuantityChange);
-                }
-            });
-            let debounceTimer = null;
-            function handleQuantityChange(e) {
-                const newValue = e.target.value || -1;
-                const productId = e.target.dataset.productId || e.currentTarget.dataset.productId;;
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    controlQuantity(newValue, productId, [result[1]]);
-                    console.log('Debounced update');
-                }, 1500);
+            const result = await response.json();
+
+            if (!response.ok) throw new Error(result.message || 'Failed to update cart');
+
+            if (result.message === 'Product removed from cart.') {
+                Toaster('Product removed from cart.');
+                document.querySelector(`[data-product-id="${id}"]`)?.closest('tr')?.remove();
+            } else if (result.message === 'Product quantity updated.') {
+                Toaster('Product quantity updated.');
+                const input = document.querySelector(`input[data-product-id="${id}"]`);
+                const price = input.dataset.productPrice;
+                const grossTotal = input.closest('td').nextElementSibling;
+                grossTotal.innerHTML = '₹' + (Number(price) * Number(qty));
+                grossTotal.setAttribute('value', Number(price) * Number(qty));
             }
 
-
-        } catch (error) {
-            console.error('Error fetching cart items:', error);
-            return [];
+            updatePrice();
+        } catch (err) {
+            console.error('Cart update failed:', err);
         }
-    })
-}
+    };
 
-renderInCart()
+    const renderCart = async () => {
+        const cartList = document.querySelector('.cart-list');
+        if (cartList) cartList.innerHTML = '';
+
+        try {
+            const checkResult = await checkCookies;
+            if (!checkResult[0]) return console.log('User not logged in');
+            token = checkResult[1];
+
+            const response = await fetch(`${baseUrl}/get-cart`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch cart items');
+
+            const { cart } = await response.json();
+
+            cart.forEach(({ product, quantity }) => {
+                const row = document.createElement('tr');
+                row.className = 'cart-item';
+                row.innerHTML = `
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img style="width:100px" src="${product.imageUrl}" class="rounded me-2" />
+                            <span>${product.name}</span>
+                        </div>
+                    </td>
+                    <td>₹${product.price}</td>
+                    <td>
+                        <input type="number" class="form-control quantity-control"
+                            name="quantity" data-product-price="${product.price}"
+                            data-product-id="${product._id}" value="${quantity}" min="1">
+                    </td>
+                    <td class="gross-total" value="${product.price * quantity}">₹${product.price * quantity}</td>
+                    <td>
+                        <button id="delete" value="-1" data-product-id="${product._id}" class="btn btn-sm btn-danger quantity-control">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                if(cartList) cartList.appendChild(row);
+            });
+
+            updatePrice();
+
+            document.querySelectorAll('.quantity-control').forEach(control => {
+                control.removeEventListener('change', handleChange);
+                control.addEventListener('change', handleChange);
+                if (control.id === 'delete') {
+                    control.addEventListener('click', handleChange);
+                }
+            });
+
+        } catch (err) {
+            console.error('Error rendering cart:', err);
+        }
+    };
+
+    let debounceTimer;
+    const handleChange = (e) => {
+        const value = e.target.value || -1;
+        const productId = e.target.dataset.productId || e.currentTarget.dataset.productId;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            controlQuantity(value, productId);
+        }, 1000);
+    };
+
+    return {
+        render: renderCart,
+        update: controlQuantity,
+        get total() {
+            const grandTotal = document.querySelector('#grandPrice');
+            return Number(grandTotal?.getAttribute('value')) || 0;
+        }
+    };
+})();
+CartModule.render();
