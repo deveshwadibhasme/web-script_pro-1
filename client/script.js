@@ -26,7 +26,7 @@ fetchAllProduct().then(products => {
 
     })
 
-    const pathName = ['/index.html', '/cart.html', '/orders.html', '/contact.html', '/offers.html']
+    const pathName = ['/index.html', '/cart.html', '/orders.html', '/contact.html', '/offers.html','/']
     categories.forEach((cat, idx) => {
         const li = document.createElement('li')
         li.innerHTML =

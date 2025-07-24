@@ -112,7 +112,7 @@ const controlQuantity = async (qty, id, token) => {
             },
             body: JSON.stringify({ productId: id, quantity: qty })
         });
-        const result = await response.json()        
+        const result = await response.json()
         const cartList = document.querySelector('.cart-list')
         cartList.innerHTML = ''
         if (result.message === 'Product removed from cart.') {
@@ -192,6 +192,7 @@ const renderInCart = () => {
                     const price = ele.previousElementSibling.childNodes[1].dataset.productPrice
                     const quantity = ele.previousElementSibling.childNodes[1].getAttribute('value')
                     const x = Number(quantity)
+                    quantityControl.value = x
                     ele.previousElementSibling.childNodes[1].setAttribute('value', x)
                     ele.innerHTML = '₹' + Number(price) * Number(x)
                     ele.setAttribute('value', Number(price) * Number(x))
@@ -206,25 +207,24 @@ const renderInCart = () => {
                 }
             }
             updatePrice()
-            if (quantityControl) {
-                quantityControl.forEach(control => {
-                    control.removeEventListener('change', handleQuantityChange);
-                    control.addEventListener('change', handleQuantityChange);
-                    if (control.id === 'delete') {
-                        control.addEventListener('click', handleQuantityChange);
-                    }
-                });
-                let debounceTimer = null; 
-                function handleQuantityChange(e) {
-                    const newValue = e.target.value || -1;
-                    const productId = e.target.dataset.productId || e.currentTarget.dataset.productId;;
-                    clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(() => {
-                        controlQuantity(newValue, productId, [result[1]]);
-                        console.log('Debounced update');
-                    }, 1500);
+            quantityControl.forEach(control => {
+                control.removeEventListener('change', handleQuantityChange);
+                control.addEventListener('change', handleQuantityChange);
+                if (control.id === 'delete') {
+                    control.addEventListener('click', handleQuantityChange);
                 }
+            });
+            let debounceTimer = null;
+            function handleQuantityChange(e) {
+                const newValue = e.target.value || -1;
+                const productId = e.target.dataset.productId || e.currentTarget.dataset.productId;;
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    controlQuantity(newValue, productId, [result[1]]);
+                    console.log('Debounced update');
+                }, 1500);
             }
+
 
         } catch (error) {
             console.error('Error fetching cart items:', error);

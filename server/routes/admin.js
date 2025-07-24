@@ -52,7 +52,7 @@ router.post('/unblock-user/:userId', auth, async (req, res) => {
         }
         user.adminRestrict = false;
         await user.save();
-        res.status(200).json({ message: 'User unblocked successfully.'});
+        res.status(200).json({ message: 'User unblocked successfully.' });
     } catch (error) {
         console.error('Error unblocking user:', error);
         res.status(500).json({ message: 'Internal server error.' });
@@ -77,8 +77,7 @@ router.post('/add-products', auth, (req, res) => {
             const admin = await Admin.findById(req.user.id);
             if (!admin) return res.status(404).json({ message: 'Admin not found' });
 
-            let product = await Product.findOne({ productId, adminId: admin._id });
-
+            let product = await Product.findOne({ productId });
             if (!product) {
                 await Product.create({
                     adminId: admin._id,
@@ -92,17 +91,46 @@ router.post('/add-products', auth, (req, res) => {
                 return res.status(201).json({ message: 'Product added successfully', products: await Product.find({ adminId: admin._id }) });
             } else {
                 product.stock = Number(product.stock) + Number(stock);
+                product.price = Number(price);
+                if (req.file?.path) {
+                    product.imageUrl = req.file.path;
+                }
+
                 await product.save();
                 return res.json({ message: 'Product stock updated successfully' });
             }
         } catch (err) {
-            // Also ensure this catch block prints detailed errors
             console.error('Error in /add-products (Mongoose/Logic):', JSON.stringify(err, Object.getOwnPropertyNames(err), 2));
             res.status(500).json({ message: 'Internal server error' });
         }
-    }); // End of upload.single('image') wrapper
+    });
 });
 
+router.delete('/del-product/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    if (product.imageUrl) {
+      const parts = product.imageUrl.split('/');
+      const filename = parts[parts.length - 1]; 
+      const publicId = filename.split('.')[0];
+
+      await cloudinary.uploader.destroy(publicId);
+    }
+
+    await Product.findByIdAndDelete(productId);
+
+    res.status(200).json({ message: 'Product deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 
 module.exports = router;
