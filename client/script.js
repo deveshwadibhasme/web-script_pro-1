@@ -26,7 +26,7 @@ fetchAllProduct().then(products => {
 
     })
 
-    const pathName = ['/index.html', '/cart.html', '/orders.html', '/contact.html', '/offers.html','/']
+    const pathName = ['/index.html', '/cart.html', '/orders.html', '/contact.html', '/offers.html', '/']
     categories.forEach((cat, idx) => {
         const li = document.createElement('li')
         li.innerHTML =
@@ -38,10 +38,34 @@ fetchAllProduct().then(products => {
     })
 
     const cardContainer = document.querySelectorAll('.row.g-4')
+    
+    if(location.pathname === '/index.html' || location.pathname === '/'){
+    cardContainer[0].innerHTML = ''
+    categories.forEach((cat, idx) => {
+         const div = document.createElement('div')
+        div.className = 'col-6 col-md-4 col-lg-3'
+        div.innerHTML = `
+          <div class="card shadow  p-3 h-100">
+            <h5 class="fw-bold mb-3 text-center text-primary">${cat}</h5>
+            <div class="overflow-hidden ">
+              <img
+                src="https://pngimg.com/d/shopping_cart_PNG7.png"
+                alt="Electronics" class="img-fluid category-image mb-3"
+                style="transition: transform 0.4s; height: 220px; object-fit: cover; width: 100%;">
+            </div>
+            <a href="${(location.pathname.split('/')[1] === 'Categories' || pathName.includes(location.pathname))
+                ? '/Categories/' :
+                '/'}${linkTocategory[idx]}.html" class="text-decoration-none fw-semibold text-primary">See More</a>
+          </div>`
+          cardContainer[0].append(div)
+        })
+    }
+
+
     if (cardContainer[1]) {
         cardContainer[1].innerHTML = '';
     }
-    products.forEach(product => {
+    products.forEach((product,idx) => {
         if (product.category.toLocaleLowerCase().split(' ')[0] !== location.pathname.split('/')[2]?.split('.')[0]) {
 
             return;
@@ -60,22 +84,22 @@ fetchAllProduct().then(products => {
         `
         cardContainer[1]?.append(cardDiv)
         const allProductCards = document?.querySelectorAll('.card a');
-    const addToCartLinks = Array.from(allProductCards)
-        .filter(link => link.innerText.trim() === 'Add to Cart');
-    addToCartLinks.forEach(card => {
-        card.addEventListener('click', (event) => {
-            event.preventDefault();
-            logInCheck.then(([isLoggedIn]) => {
-                if (!isLoggedIn) {
-                    Toaster('Please log in to add items to your cart.');
-                    return;
-                }
+        const addToCartLinks = Array.from(allProductCards)
+            .filter(link => link.innerText.trim() === 'Add to Cart');
+        addToCartLinks.forEach(card => {
+            card.addEventListener('click', (event) => {
                 event.preventDefault();
-                const productId = card.parentElement.parentElement.getAttribute('data-product-id');
-                addToCart(productId)
-            });
+                logInCheck.then(([isLoggedIn]) => {
+                    if (!isLoggedIn) {
+                        Toaster('Please log in to add items to your cart.');
+                        return;
+                    }
+                    event.preventDefault();
+                    const productId = card.parentElement.parentElement.getAttribute('data-product-id');
+                    addToCart(productId)
+                });
+            })
         })
-    })
     });
 
 })

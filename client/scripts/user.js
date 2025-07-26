@@ -196,7 +196,7 @@ const CartModule = (() => {
                         </button>
                     </td>
                 `;
-                if(cartList) cartList.appendChild(row);
+                if (cartList) cartList.appendChild(row);
             });
 
             updatePrice();
@@ -224,9 +224,41 @@ const CartModule = (() => {
         }, 1000);
     };
 
+
+    const orders = [
+        { id: 101, name: 'Rahul', product: 'T-Shirt', quantity: 2, status: 'Pending' },
+        { id: 102, name: 'Aisha', product: 'Mug', quantity: 1, status: 'Completed' },
+        { id: 103, name: 'Devesh', product: 'Cap', quantity: 3, status: 'Shipped' }
+    ];
+    const tableBody = document.getElementById('orderTableBody');
+    const renderOrders = () => {
+        if(tableBody)
+        tableBody.innerHTML = ''; 
+
+        orders.forEach(order => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                     <td>${order.id}</td>
+                     <td>${order.product}</td>
+                     <td>${order.quantity}</td>
+                     <td><span class="status ${order.status}">${order.status}</span></td>
+                     <td><button class="btn btn-sm btn-danger">Cancel</button></td>
+                        `;
+            tableBody?.appendChild(row);
+            const cancelButton = row.querySelector('button');
+            if(order.status === 'Shipped' || order.status === 'Completed'){
+                cancelButton.style.display = 'none';
+            }
+
+        });
+    }
+
+
     return {
         render: renderCart,
         update: controlQuantity,
+        order: renderOrders,
         get total() {
             const grandTotal = document.querySelector('#grandPrice');
             return Number(grandTotal?.getAttribute('value')) || 0;
@@ -234,3 +266,4 @@ const CartModule = (() => {
     };
 })();
 CartModule.render();
+CartModule.order()
