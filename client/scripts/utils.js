@@ -1,7 +1,6 @@
 
 
 let checkCookies = cookieStore?.get('token').then(token => {
-
     if (token && token.value) {
         // console.log("Token found:", token.value); 
         return [true, token.value];
@@ -50,6 +49,8 @@ const fetchAllProduct = async () => {
     const LOCAL_URL = 'http://localhost:5000/user/all-product';
     const PROD_URL = 'https://ecomm-webscript.onrender.com/user/all-product';
     const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
+
+    
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -68,6 +69,37 @@ const fetchAllProduct = async () => {
     }
 }
 
+const postTotalPrice = async () => {
+    const LOCAL_URL = 'http://localhost:5000/user/total-price';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com/user/total-price';
+    const url = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL
+
+    const isLoginToken = await checkCookies;
+    if (!isLoginToken[0]) {
+        Toaster('Please log in to proceed.');
+        return;
+    }
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${isLoginToken[1]}`
+            }   
+        });
+
+        if (!response.ok) {
+            throw new Error('Server Error');
+        }
+    }
+    catch (error) {
+        console.error('Error:', error);
+        Toaster('internal Server Error');
+    }
+}
 
 
-export { logInCheck, checkCookies, Toaster, fetchAllProduct };
+
+
+
+export { logInCheck, checkCookies, Toaster, fetchAllProduct, postTotalPrice };

@@ -8,6 +8,7 @@ import { addToCart, getFeaturedProduct, getUserPanelData } from './scripts/user.
 
 const loginButton = document.querySelectorAll('.navbar-nav .nav-item .nav-link')[6];
 const FeaturedScroll = document.querySelector('.featured-scroll')
+const checkOut = document.querySelector('#checkout');
 
 
 fetchAllProduct().then(products => {
@@ -38,13 +39,13 @@ fetchAllProduct().then(products => {
     })
 
     const cardContainer = document.querySelectorAll('.row.g-4')
-    
-    if(location.pathname === '/index.html' || location.pathname === '/'){
-    cardContainer[0].innerHTML = ''
-    categories.forEach((cat, idx) => {
-         const div = document.createElement('div')
-        div.className = 'col-6 col-md-4 col-lg-3'
-        div.innerHTML = `
+
+    if (location.pathname === '/index.html' || location.pathname === '/') {
+        cardContainer[0].innerHTML = ''
+        categories.forEach((cat, idx) => {
+            const div = document.createElement('div')
+            div.className = 'col-6 col-md-4 col-lg-3'
+            div.innerHTML = `
           <div class="card shadow  p-3 h-100">
             <h5 class="fw-bold mb-3 text-center text-primary">${cat}</h5>
             <div class="overflow-hidden ">
@@ -54,10 +55,10 @@ fetchAllProduct().then(products => {
                 style="transition: transform 0.4s; height: 220px; object-fit: cover; width: 100%;">
             </div>
             <a href="${(location.pathname.split('/')[1] === 'Categories' || pathName.includes(location.pathname))
-                ? '/Categories/' :
-                '/'}${linkTocategory[idx]}.html" class="text-decoration-none fw-semibold text-primary">See More</a>
+                    ? '/Categories/' :
+                    '/'}${linkTocategory[idx]}.html" class="text-decoration-none fw-semibold text-primary">See More</a>
           </div>`
-          cardContainer[0].append(div)
+            cardContainer[0].append(div)
         })
     }
 
@@ -65,7 +66,7 @@ fetchAllProduct().then(products => {
     if (cardContainer[1]) {
         cardContainer[1].innerHTML = '';
     }
-    products.forEach((product,idx) => {
+    products.forEach((product, idx) => {
         if (product.category.toLocaleLowerCase().split(' ')[0] !== location.pathname.split('/')[2]?.split('.')[0]) {
 
             return;
@@ -155,15 +156,105 @@ logInCheck.then(([isLoggedIn]) => {
                 Toaster('An error occurred while logging out.');
             });
         });
-        getUserPanelData().then(panelData => {
-            console.log(panelData)
-        });
     }
     else {
         loginButton.addEventListener('click', () => {
             window.location.href = '/login.html';
         });
     }
+})
+
+
+
+checkOut?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const LOCAL_URL = 'http://localhost:5000';
+    const PROD_URL = 'https://ecomm-webscript.onrender.com';
+    const baseUrl = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
+
+
+    const isLoginToken = await checkCookies;
+
+    if (!isLoginToken[0]) {
+        Toaster('Please log in to proceed to checkout.');
+        return;
+    }
+    getUserPanelData().then(async (panelData) => {
+        if (panelData.cart.length === 0) {
+            Toaster('Your cart is empty. Please add items to your cart before checking out.');
+            return;
+        }
+        try {
+            const response = await fetch(`${baseUrl}/payment/create-order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${isLoginToken[1]}`
+                },
+                body: JSON.stringify({ panelData })
+            });
+
+            if (!response.ok) throw new Error('Failed to checkout');
+
+            const result = await response.json();
+
+            const order = result.order;
+
+            const options = {
+                key: 'rzp_test_uKcZGSMuN7tEhw',
+                amount: order.amount,
+                currency: order.currency,
+                name: "Sell Anything",
+                description: "Your order",
+                image: "https://example.com/logo.png",
+                order_id: order.id, // ✅ Razorpay order ID from backend
+                handler: async function (response) {
+                    // This function is called when payment is completed
+                    const verifyRes = await fetch(baseUrl + '/payment/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${isLoginToken[1]}`
+                        },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        })
+                    });
+
+                    const result = await verifyRes.json();
+                    if (result.success) {
+                        Toaster("Payment verified successfully!");
+                        // response.redirect = '/orders.html';
+                        // document.location.href = '/cart.html';
+                    } else {
+                        Toaster("Payment verification failed!");
+                    }
+                },
+                prefill: {
+                    name: panelData.username,
+                    email: panelData.email,
+                    contact: panelData.phone
+                },
+                theme: {
+                    color: "#3399cc"
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+
+
+        } catch (err) {
+            console.error('Checkout failed:', err);
+        }
+    }).catch((err) => {
+        console.error('Error during checkout:', err);
+        Toaster('An error occurred during checkout. Please try again later.');
+    });
+
+
 })
 
 

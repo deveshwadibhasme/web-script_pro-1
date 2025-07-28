@@ -1,4 +1,5 @@
-import { checkCookies, Toaster } from "./utils.js";
+import { checkCookies, postTotalPrice, Toaster } from "./utils.js";
+
 
 export const getUserPanelData = () => {
     const LOCAL_URL = 'http://localhost:5000/user/panel';
@@ -24,7 +25,7 @@ export const getUserPanelData = () => {
             }
 
             const panel = await response.json();
-            return [panel.cart, panel.username];
+            return panel.user;
         } catch (error) {
             console.error('Error fetching cart items:', error);
             return [];
@@ -77,7 +78,7 @@ export const addToCart = (productId) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${[result[1]]}`
                 },
-                body: JSON.stringify({ productId })
+                body: JSON.stringify({ productId, quantity: 1 })
             });
 
             if (!response.ok) {
@@ -99,12 +100,16 @@ export const addToCart = (productId) => {
     });
 }
 
+
+
 const CartModule = (() => {
     let token = null;
 
     const LOCAL_URL = 'http://localhost:5000/user';
     const PROD_URL = 'https://ecomm-webscript.onrender.com/user';
     const baseUrl = window.location.hostname === '127.0.0.1' ? LOCAL_URL : PROD_URL;
+
+
 
     const updatePrice = () => {
         const grossTotal = document.querySelectorAll('.gross-total');
@@ -117,6 +122,7 @@ const CartModule = (() => {
             grandTotal.innerHTML = '₹' + (totalValue + 100);
             grandTotal.setAttribute('value', totalValue + 100);
         }
+        postTotalPrice()
     };
 
     const controlQuantity = async (qty, id) => {
@@ -145,12 +151,15 @@ const CartModule = (() => {
                 grossTotal.innerHTML = '₹' + (Number(price) * Number(qty));
                 grossTotal.setAttribute('value', Number(price) * Number(qty));
             }
-
+            postTotalPrice()
             updatePrice();
+
         } catch (err) {
             console.error('Cart update failed:', err);
         }
     };
+
+
 
     const renderCart = async () => {
         const cartList = document.querySelector('.cart-list');
@@ -197,9 +206,12 @@ const CartModule = (() => {
                     </td>
                 `;
                 if (cartList) cartList.appendChild(row);
+                postTotalPrice()
             });
 
+
             updatePrice();
+
 
             document.querySelectorAll('.quantity-control').forEach(control => {
                 control.removeEventListener('change', handleChange);
@@ -232,8 +244,8 @@ const CartModule = (() => {
     ];
     const tableBody = document.getElementById('orderTableBody');
     const renderOrders = () => {
-        if(tableBody)
-        tableBody.innerHTML = ''; 
+        if (tableBody)
+            tableBody.innerHTML = '';
 
         orders.forEach(order => {
             const row = document.createElement('tr');
@@ -247,7 +259,7 @@ const CartModule = (() => {
                         `;
             tableBody?.appendChild(row);
             const cancelButton = row.querySelector('button');
-            if(order.status === 'Shipped' || order.status === 'Completed'){
+            if (order.status === 'Shipped' || order.status === 'Completed') {
                 cancelButton.style.display = 'none';
             }
 
@@ -259,11 +271,8 @@ const CartModule = (() => {
         render: renderCart,
         update: controlQuantity,
         order: renderOrders,
-        get total() {
-            const grandTotal = document.querySelector('#grandPrice');
-            return Number(grandTotal?.getAttribute('value')) || 0;
-        }
     };
 })();
 CartModule.render();
 CartModule.order()
+

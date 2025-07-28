@@ -133,9 +133,10 @@
             <hr>
             <div class="d-flex justify-content-between fw-bold mb-3">
               <span>Total</span>
-              <span id="grandPrice">₹19300</span>
+              <div hidden id="grandPrice-hidden"></div>
+              <span id="grandPrice">₹</span>
             </div>
-            <a href="checkout.html" class="btn btn-success w-100">
+            <a href="" id="checkout" class="btn btn-success w-100">
               <i class="fas fa-credit-card"></i> Proceed to Checkout
             </a>
           </div>
@@ -225,7 +226,7 @@
 
 
 
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

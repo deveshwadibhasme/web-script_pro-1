@@ -17,7 +17,7 @@ function auth(req, res, next) {
 
 router.post('/add-to-cart', auth, async (req, res) => {
     try {
-        const { productId, quantity } = req.body;
+        const { productId, quantity, totalPrice } = req.body;
         if (!productId) {
             return res.status(400).json({ message: 'Product ID is required.' });
         }
@@ -35,6 +35,11 @@ router.post('/add-to-cart', auth, async (req, res) => {
         const cartItem = user.cart.find(item =>
             item.product.toString() === product._id.toString()
         );
+
+        if (totalPrice) {
+            cartItem.totalPrice = totalPrice
+            await user.save()
+        }
 
         if (cartItem) {
             if (Number(quantity) < 0) {
@@ -85,13 +90,35 @@ router.get('/get-cart', auth, async (req, res) => {
     }
 })
 
+router.post('/total-price', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+            .populate('cart.product');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        const totalPrice = user.cart.reduce((total, item) => {
+            return total + (item.product.price * item.quantity);
+        }, 0);
+        if (user.cart[0]) user.cart[0].totalPrice = totalPrice;
+
+        await user.save();
+
+        res.status(200).json({ message: 'Total Price Updated', totalPrice: totalPrice });
+
+    } catch (error) {
+        console.error('Get total price error:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+})
+
 // User panel
 router.get('/panel', auth, async (req, res) => {
     const user = await User.findById(req.user.id);
-    res.json({ username: user.username, cart: user.cart });
+    res.json({ user });
 });
-
-
 
 
 router.get('/all-product', async (req, res) => {
@@ -116,33 +143,64 @@ router.get('/featured-product', async (req, res) => {
     }
 });
 
-const updateCartQuantity = async (req, res) => {
+router.post('/order', auth, async (req, res) => {
     try {
-        const { productId, quantity } = req.body;
-
-        if (!productId || quantity == null || quantity < 1) {
-            return res.status(400).json({ message: 'Valid productId and quantity are required.' });
-        }
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, panelData } = req.body;
 
         const user = await User.findById(req.user.id);
-        if (!user) return res.status(404).json({ message: 'User not found.' });
-
-        const item = user.cart.find(item => item.product.toString() === productId);
-
-        if (!item) {
-            return res.status(404).json({ message: 'Product not found in cart.' });
+        await User.findByIdAndUpdate(req.user.id, { $set: { cart: [] } });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
         }
 
-        item.quantity = quantity;
+        // Create a new order
+        // const newOrder = new Order({
+        //     userId: user._id,
+        //     items: user.cart.map(item => ({
+        //         name: item.product.name,
+        //         quantity: item.quantity,
+        //         price: item.product.price
+        //     })),
+        //     payment: {
+        //         method: 'Razorpay',
+        //         isPaid: true,
+        //         paidAt: new Date(),
+        //         paymentDetails: {
+        //             razorpay_order_id,
+        //             razorpay_payment_id,
+        //             razorpay_signature
+        //         }
+        //     },
+        //     totalAmount: panelData.cart[0].totalPrice,
+        //     status: 'pending'
+        // });
+
+        // await newOrder.save();
+
+        // Clear the user's cart
+        // user.orders.push(newOrder._id);
         await user.save();
 
-        res.status(200).json({ message: 'Cart updated.', cart: user.cart });
-
-    } catch (err) {
-        console.error('Update quantity error:', err);
+        res.status(200).json({ message: 'Order created successfully and cart cleared.', order: newOrder });
+    } catch (error) {
+        console.error('Error creating order:', error);
         res.status(500).json({ message: 'Internal server error.' });
     }
-};
+});
+
+router.get('/get-orders', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).populate('orders');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        res.status(200).json({ orders: user.orders });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
 
 
 module.exports = router;

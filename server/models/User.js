@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
     cart: [{
         _id: false,
         product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-        quantity: { type: Number, default: "1" }
+        quantity: { type: Number, default: "1" },
+        totalPrice: { type: Number, default: 0 },
     }],
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
 });
