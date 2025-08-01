@@ -11,51 +11,109 @@
  <link rel="stylesheet" href="style.css">
   <style>
 
-.container-order {
-  max-width: 1200px;
-  margin: auto;
-  background-color: white;
-  padding: 20px;
-  border-radius: 6px;
-  overflow: auto;
-}
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    .container-table {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
 
-table thead {
-  background-color: #007bff;
-  color: white;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
 
-table th, table td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
 
-.status {
-  font-weight: bold;
-}
+    th {
+      background-color: #f1f5f9;
+      color: #333;
+      font-weight: 600;
+    }
 
-.status.Pending {
-  color: orange;
-}
+    .product-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.status.Completed {
-  color: green;
-}
+    .product-cell img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
 
-.status.Shipped {
-  color: blue;
-}
+    .product-name {
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      text-transform: capitalize;
+      display: inline-block;
+    }
+
+    .pending { background-color: #fef3c7; color: #92400e; }
+    .shipped { background-color: #dbeafe; color: #1e40af; }
+    .delivered { background-color: #d1fae5; color: #065f46; }
+    .cancelled { background-color: #fee2e2; color: #991b1b; }
+
+    .action-btn {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .action-btn:hover {
+      background-color: #2563eb;
+    }
+
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        background-color: transparent;
+        border-bottom: none;
+      }
+
+      td {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 10px;
+      }
+
+      td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        color: #555;
+      }
+    }
 
   </style>
 </head>
@@ -143,20 +201,22 @@ table th, table td {
 
 
 
- <div class="container-order">
- <h2 class="fw-bold mb-4 text-primary">My Order</h2>
+<div class="container-table">
+    <h2>My Orders</h2>
     <table>
       <thead>
         <tr>
           <th>Order ID</th>
           <th>Product</th>
           <th>Quantity</th>
+          <th>Payment</th>
+          <th>Total</th>
           <th>Status</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody id="orderTableBody">
-        <!-- Orders will be injected here -->
+        <!-- Dynamic Orders Go Here -->
       </tbody>
     </table>
   </div>

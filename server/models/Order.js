@@ -1,4 +1,3 @@
-// models/Order.js
 const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema({
@@ -7,10 +6,29 @@ const orderItemSchema = new mongoose.Schema({
     ref: 'Product',
     required: true
   },
-  name: String, // snapshot of product name at time of order
-  quantity: { type: Number, required: true, min: 1 },
-  price: { type: Number, required: true }, // snapshot of product price
-  totalPrice: { type: Number, required: true } // quantity * price
+  name: {
+    type: String,
+    required: true 
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  imageUrl: {
+    type: String,
+  },
+}, { _id: false }); 
+
+const paymentDetailsSchema = new mongoose.Schema({
+  razorpay_order_id: { type: String },
+  razorpay_payment_id: { type: String },
+  razorpay_signature: { type: String }
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
@@ -23,28 +41,50 @@ const orderSchema = new mongoose.Schema({
   admin: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Admin',
-    default: null 
+    default: null
   },
-  items: [orderItemSchema],
-  shippingAddress: {type: String, required: true},
+
+  items: {
+    type: [orderItemSchema],
+    validate: [arr => arr.length > 0, 'Order must contain at least one item']
+  },
+
+  shippingAddress: {
+    type: String,
+    required: true
+  },
+
   payment: {
-    method: { type: String, enum: ['COD', 'Razorpay', 'Stripe'], default: 'COD' },
-    isPaid: { type: Boolean, default: false },
-    paidAt: { type: Date },
-    paymentDetails: {
-      razorpay_order_id: String,
-      razorpay_payment_id: String,
-      razorpay_signature: String
-    }
+    method: {
+      type: String,
+      enum: ['COD', 'Razorpay', 'Stripe'],
+      default: 'Razorpay'
+    },
+    isPaid: {
+      type: Boolean,
+      default: false
+    },
+    paidAt: {
+      type: Date
+    },
+    paymentDetails: paymentDetailsSchema
   },
+
   status: {
     type: String,
     enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],
     default: 'pending'
   },
 
-  totalAmount: { type: Number, required: true },
-  createdAt: { type: Date, default: Date.now }
-});
+  totalAmount: {
+    type: Number,
+    required: true,
+    min: 0
+  },
 
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 module.exports = mongoose.model('Order', orderSchema);

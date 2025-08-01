@@ -237,35 +237,61 @@ const CartModule = (() => {
     };
 
 
-    const orders = [
-        { id: 101, name: 'Rahul', product: 'T-Shirt', quantity: 2, status: 'Pending' },
-        { id: 102, name: 'Aisha', product: 'Mug', quantity: 1, status: 'Completed' },
-        { id: 103, name: 'Devesh', product: 'Cap', quantity: 3, status: 'Shipped' }
-    ];
-    const tableBody = document.getElementById('orderTableBody');
-    const renderOrders = () => {
+    const renderOrders = async () => {
+        const checkResult = await checkCookies;
+        if (!checkResult[0]) return console.log('User not logged in');
+        token = checkResult[1];
+        const response = await fetch(`${baseUrl}/get-orders`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch orders');
+        }
+        const { orders } = await response.json();
+        console.log(orders);
+
+
+        const tableBody = document.getElementById('orderTableBody');
         if (tableBody)
             tableBody.innerHTML = '';
-
         orders.forEach(order => {
-            const row = document.createElement('tr');
+            order.items.forEach(item => {
+                const row = document.createElement('tr');
 
-            row.innerHTML = `
-                     <td>${order.id}</td>
-                     <td>${order.product}</td>
-                     <td>${order.quantity}</td>
-                     <td><span class="status ${order.status}">${order.status}</span></td>
-                     <td><button class="btn btn-sm btn-danger">Cancel</button></td>
-                        `;
-            tableBody?.appendChild(row);
-            const cancelButton = row.querySelector('button');
-            if (order.status === 'Shipped' || order.status === 'Completed') {
-                cancelButton.style.display = 'none';
-            }
+                const imageUrl = item.imageUrl
 
+                const total = item.quantity * item.price;
+
+                row.innerHTML = `
+        <td data-label="Order ID">${order._id.slice(-6).toUpperCase()}</td>
+        <td data-label="Product">
+          <div class="product-cell">
+            <img src="${imageUrl}" alt="${item.name}" />
+            <div class="product-name">${item.name}</div>
+          </div>
+        </td>
+        <td data-label="Quantity">${item.quantity}</td>
+        <td data-label="Payment">${order.payment.method} - ${order.payment.isPaid ? 'Paid' : 'Unpaid'}</td>
+        <td data-label="Total">₹${total.toFixed(2)}</td>
+        <td data-label="Status"><span class="status ${order.status.toLowerCase()}">${order.status}</span></td>
+        <td data-label="Action">
+          <button class="action-btn" onclick="handleOrderAction('${order._id}')">Track</button>
+        </td>
+      `;
+
+                tableBody.appendChild(row);
+            });
         });
+
     }
 
+    function handleOrderAction(orderId) {
+        alert("Tracking order: " + orderId);
+    }
 
     return {
         render: renderCart,

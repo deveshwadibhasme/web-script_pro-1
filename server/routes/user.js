@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const Product = require('../models/Product');
+const Order = require('../models/Order');
 const router = express.Router();
 
 // Auth middleware
@@ -145,43 +146,50 @@ router.get('/featured-product', async (req, res) => {
 
 router.post('/order', auth, async (req, res) => {
     try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, panelData } = req.body;
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-        const user = await User.findById(req.user.id);
-        await User.findByIdAndUpdate(req.user.id, { $set: { cart: [] } });
+        const user = await User.findById(req.user.id).populate('cart.product');
+
+
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        // Create a new order
-        // const newOrder = new Order({
-        //     userId: user._id,
-        //     items: user.cart.map(item => ({
-        //         name: item.product.name,
-        //         quantity: item.quantity,
-        //         price: item.product.price
-        //     })),
-        //     payment: {
-        //         method: 'Razorpay',
-        //         isPaid: true,
-        //         paidAt: new Date(),
-        //         paymentDetails: {
-        //             razorpay_order_id,
-        //             razorpay_payment_id,
-        //             razorpay_signature
-        //         }
-        //     },
-        //     totalAmount: panelData.cart[0].totalPrice,
-        //     status: 'pending'
-        // });
+        const newOrder = new Order({
+            user: user._id,
+            items: user.cart.map(item => ({
+                product: item.product._id,
+                name: item.product.name,
+                quantity: item.quantity,
+                price: item.product.price,
+                imageUrl: item.product.imageUrl || 'N/A'
+            })),
+            shippingAddress: user.address || 'N/A', 
+            phone: user.phone || 'N/A',
+            payment: {
+                method: 'Razorpay',
+                isPaid: true,
+                paidAt: new Date(),
+                paymentDetails: {
+                    razorpay_order_id,
+                    razorpay_payment_id,
+                    razorpay_signature
+                }
+            },
+            totalAmount: user.cart.reduce((acc, item) => acc + item.quantity * item.product.price, 0),
+            status: 'pending'
+        });
 
-        // await newOrder.save();
+        user.cart = [];
 
-        // Clear the user's cart
-        // user.orders.push(newOrder._id);
+
+        await newOrder.save();
+
+        user.orders.push(newOrder._id);
+
         await user.save();
 
-        res.status(200).json({ message: 'Order created successfully and cart cleared.', order: newOrder });
+        res.status(200).json({ message: 'Order created successfully and cart cleared.' });
     } catch (error) {
         console.error('Error creating order:', error);
         res.status(500).json({ message: 'Internal server error.' });
