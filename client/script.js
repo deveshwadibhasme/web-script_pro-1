@@ -41,7 +41,7 @@ fetchAllProduct().then(products => {
     })
 
     const cardContainer = document.querySelectorAll('.row.g-4')
-
+    console.log(cardContainer)
     if (location.pathname === '/index.html' || location.pathname === '/') {
         cardContainer[0].innerHTML = ''
         categories.forEach((cat, idx) => {
@@ -60,7 +60,7 @@ fetchAllProduct().then(products => {
                     ? '/Categories/' :
                     '/'}${linkTocategory[idx]}.html" class="text-decoration-none fw-semibold text-primary">See More</a>
           </div>`
-            cardContainer[0].append(div)
+           cardContainer[0].append(div)
         })
     }
 

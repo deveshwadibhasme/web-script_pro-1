@@ -3,6 +3,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const sendEmail = require('../middleware/email');
 const router = express.Router();
 
 // Auth middleware
@@ -149,7 +150,8 @@ router.post('/order', auth, async (req, res) => {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
         const user = await User.findById(req.user.id).populate('cart.product');
-
+        const products = await Product.find({ _id: { $in: user.cart.map(item => item.product._id) } });
+        
 
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
@@ -180,14 +182,23 @@ router.post('/order', auth, async (req, res) => {
             status: 'pending'
         });
 
-        user.cart = [];
-
 
         await newOrder.save();
 
         user.orders.push(newOrder._id);
+        products.forEach(product => {
+            
+            const cartItem = user.cart.find(item => item.product._id.toString() === product._id.toString());
+            if (cartItem) {
+                product.stock -= cartItem.quantity;
+                product.save();
+            }
+        });
+        user.cart = [];
 
         await user.save();
+
+        await sendEmail(user.email, `Your order has been placed successfully. Contact: 9766063468. Order ID: ${newOrder._id}. Total Amount: ₹${newOrder.totalAmount}.`);
 
         res.status(200).json({ message: 'Order created successfully and cart cleared.' });
     } catch (error) {

@@ -7,6 +7,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 const Admin = require('../models/Admin');
 const multer = require('multer');
+const cloudinary = require('../config/cloudinary')
 
 // Auth middleware
 function auth(req, res, next) {
@@ -90,8 +91,12 @@ router.post('/add-products', auth, (req, res) => {
                 });
                 return res.status(201).json({ message: 'Product added successfully', products: await Product.find({ adminId: admin._id }) });
             } else {
-                product.stock = Number(product.stock) + Number(stock);
+                if(Number(stock) < 0 && product.stock) {
+                    return res.status(400).json({ message: 'Stock cannot be negative' });
+                }
+                product.stock = Number(stock);
                 product.price = Number(price);
+                
                 if (req.file?.path) {
                     product.imageUrl = req.file.path;
                 }
